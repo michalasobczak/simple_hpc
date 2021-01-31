@@ -7,7 +7,7 @@ There are few example available:
 - reusing_code
 - naive_sort
 
-In order to run samples (ie. reusing_code, com.company2,Main), try as it as follows:
+In order to run samples (ie. reusing_code, com.company2.Main), try as it as follows:
 
 ```
 $HOME/.jdks/openjdk-15.0.2/bin/java 
