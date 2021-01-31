@@ -1,4 +1,4 @@
-package com.company3;
+package com.company4;
 
 import com.company.RuntimeConfigurationSet;
 import org.jocl.*;
@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Random;
 import static org.jocl.CL.*;
 import static org.jocl.CL.CL_MEM_READ_WRITE;
@@ -16,8 +17,10 @@ class KernelConfigurationSet {
     private final int n;
 
     public static float[] srcArrayA;
-    public static float[] dstArray;
+    public static float[] srcArrayB;
+    public static int[] dstArray;
     public static Pointer srcA;
+    public static Pointer srcB;
     public static Pointer dst;
 
     public cl_context_properties contextProperties;
@@ -43,11 +46,13 @@ class KernelConfigurationSet {
         System.out.println(" - Allocating sample data");
         return new float[this.n];
     }
-
-
-    public float[] getDstArrayA() {
-        System.out.println(" - Allocating return buffer");
+    public float[] getSrcArrayB() {
+        System.out.println(" - Allocating sample data");
         return new float[this.n];
+    }
+    public int[] getDstArrayA() {
+        System.out.println(" - Allocating return buffer");
+        return new int[this.n];
     }
 
 
@@ -55,8 +60,10 @@ class KernelConfigurationSet {
         srcArrayA = this.getSrcArrayA();
         srcA      = Pointer.to(srcArrayA);
     }
-
-
+    public void initializeSrcArrayB() {
+        srcArrayB = this.getSrcArrayB();
+        srcB      = Pointer.to(srcArrayB);
+    }
     public void initializeDstArray() {
         dstArray  = this.getDstArrayA();
         dst       = Pointer.to(dstArray);
@@ -68,6 +75,7 @@ class KernelConfigurationSet {
         Random rd = new Random();
         for (int i = 0; i <= n - 1; i++) {
             srcArrayA[i] = rd.nextFloat();
+            srcArrayB[i] = rd.nextFloat();
         }
         System.out.println(" - Finished randomizing");
     }
@@ -76,6 +84,7 @@ class KernelConfigurationSet {
     public void printSrcArray() {
         if (this.n <= 1024) {
             System.out.println(java.util.Arrays.toString(srcArrayA));
+            System.out.println(java.util.Arrays.toString(srcArrayB));
         }
     }
 
@@ -98,14 +107,15 @@ class KernelConfigurationSet {
     public void createBuffers() {
         // Allocate the memory objects for the input- and output data
         this.memObjects[0] = clCreateBuffer(this.context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, (long) Sizeof.cl_float * this.n, KernelConfigurationSet.srcA, null);
-        this.memObjects[1] = clCreateBuffer(this.context, CL_MEM_READ_WRITE, (long) Sizeof.cl_float * this.n, null, null);
+        this.memObjects[1] = clCreateBuffer(this.context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, (long) Sizeof.cl_float * this.n, KernelConfigurationSet.srcB, null);
+        this.memObjects[2] = clCreateBuffer(this.context, CL_MEM_READ_WRITE, (long) Sizeof.cl_int * this.n, null, null);
     }
 
 
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("naive_sort/src/com/company3/kernel.c"));
+            this.content = Files.readString(Path.of("pi_est_monte_carlo/src/com/company4/kernel.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,12 +132,13 @@ class KernelConfigurationSet {
         // Set the arguments for the kernel
         clSetKernelArg(this.kernel, 0, Sizeof.cl_mem, Pointer.to(this.memObjects[0]));
         clSetKernelArg(this.kernel, 1, Sizeof.cl_mem, Pointer.to(this.memObjects[1]));
+        clSetKernelArg(this.kernel, 2, Sizeof.cl_mem, Pointer.to(this.memObjects[2]));
     }
 
 
     public void configureWork() {
         this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 4 };
+        this.local_work_size  = new long[] { 1 };
     }
 
 
@@ -137,7 +148,7 @@ class KernelConfigurationSet {
             // Execute the kernel
             clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, null);
             // Read the output data
-            clEnqueueReadBuffer(this.commandQueue, this.memObjects[1], CL_TRUE, 0, (long) n * Sizeof.cl_float, KernelConfigurationSet.dst, 0, null, null);
+            clEnqueueReadBuffer(this.commandQueue, this.memObjects[2], CL_TRUE, 0, (long) n * Sizeof.cl_int, KernelConfigurationSet.dst, 0, null, null);
             long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
             System.out.println("Took OpenCL: " + String.valueOf(bTime - aTime) + "ms");
         }
@@ -158,7 +169,11 @@ class KernelConfigurationSet {
         if (this.n <= 1024) {
             System.out.println("Result: " + java.util.Arrays.toString(KernelConfigurationSet.dstArray));
         }
-        System.out.println("Last result: " + KernelConfigurationSet.srcArrayA[n-1] + " giving " + KernelConfigurationSet.dstArray[n-1]);
+
+        float nf     = n*1.0F;
+        int sum      = Arrays.stream(dstArray).sum();
+        float result = (4.0F * sum) / nf;
+        System.out.println("PI EST MC: " + result);
     }
 
 } // class Configuration
