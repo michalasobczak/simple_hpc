@@ -7,7 +7,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="demo_no_1" />
+    <orderEntry type="module" module-name="opencl" />
+    <orderEntry type="module" module-name="opencl" />
     <orderEntry type="library" name="jocl-2.0.2" level="project" />
   </component>
 </module>

@@ -1,28 +1,25 @@
-package com.company3;
+package com.company;
 
-import com.company.PlatformParametersSet;
-import com.company.RuntimeConfigurationSet;
 import org.jocl.CL;
-import com.company.Utils;
 
 
 public class Main {
 
     public static void main(String[] args) {
-        Utils.log("***** NAIVE SORT   *****");
-        Utils.log("***** com.company3 *****");
+        Utils.log("***** MAIN DEMO   *****");
+        Utils.log("***** com.company *****");
 
         // -----
         Utils.log("0. OpenCL specific configuration");
         Utils.log(" - Enable exceptions and subsequently omit error checks in this sample");
-        CL.setExceptionsEnabled(true);gi
+        CL.setExceptionsEnabled(true);
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n = 16;
-        PlatformParametersSet p = new PlatformParametersSet();
+        int n = 1024*1024*50;
+        PlatformParametersSet   p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
-        KernelConfigurationSet c = new KernelConfigurationSet(n);
+        KernelConfigurationSet  c = new KernelConfigurationSet(n);
 
         // -----
         Utils.log("2. Get and print platform/devices parameters");
