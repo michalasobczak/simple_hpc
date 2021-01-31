@@ -2,10 +2,11 @@
 
 ## OpenCL
 
-There are few example available:
+There are few examples available:
 - main module
 - reusing_code
-- naive_sort
+- naive_sort (TODO)
+- pi_est_monte_carlo
 
 In order to run samples (ie. reusing_code, com.company2.Main), try as it as follows:
 
