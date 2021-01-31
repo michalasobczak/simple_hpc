@@ -16,8 +16,8 @@ $HOME/.jdks/openjdk-15.0.2/bin/java
           :$HOME/IdeaProjects/simple_hpc/opencl/out/production/opencl com.company2.Main
 ```
 
-It will work properly assuming you :
+It will work properly assuming you:
 - fetched code into $HOME/IdeaProjects/simple_hpc
 - downloaded JOCL library JAR into $HOME as well
-- built module to output out/production output folder
+- built modules (main and reusing_code) to output out/production output folder
 
