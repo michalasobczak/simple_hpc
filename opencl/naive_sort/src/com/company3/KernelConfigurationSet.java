@@ -47,7 +47,7 @@ class KernelConfigurationSet {
 
     public float[] getDstArrayA() {
         System.out.println(" - Allocating return buffer");
-        return new float[this.n];
+        return new float[this.n*100];
     }
 
 
@@ -98,7 +98,7 @@ class KernelConfigurationSet {
     public void createBuffers() {
         // Allocate the memory objects for the input- and output data
         this.memObjects[0] = clCreateBuffer(this.context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, (long) Sizeof.cl_float * this.n, KernelConfigurationSet.srcA, null);
-        this.memObjects[1] = clCreateBuffer(this.context, CL_MEM_READ_WRITE, (long) Sizeof.cl_float * this.n, null, null);
+        this.memObjects[1] = clCreateBuffer(this.context, CL_MEM_READ_WRITE, (long) Sizeof.cl_float * this.n * 100, null, null);
     }
 
 
@@ -127,18 +127,18 @@ class KernelConfigurationSet {
 
     public void configureWork() {
         this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 4 };
+        this.local_work_size  = new long[] { 1 };
     }
 
 
     public void runKernel(int iterations) {
         for (int i = 0; i<=iterations; i++) {
-            long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             // Execute the kernel
+            long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, null);
-            // Read the output data
-            clEnqueueReadBuffer(this.commandQueue, this.memObjects[1], CL_TRUE, 0, (long) n * Sizeof.cl_float, KernelConfigurationSet.dst, 0, null, null);
             long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
+            // Read the output data
+            clEnqueueReadBuffer(this.commandQueue, this.memObjects[1], CL_TRUE, 0, (long) n * Sizeof.cl_float * 100, KernelConfigurationSet.dst, 0, null, null);
             System.out.println("Took OpenCL: " + String.valueOf(bTime - aTime) + "ms");
         }
     }
