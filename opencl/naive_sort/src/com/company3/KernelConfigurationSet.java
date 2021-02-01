@@ -105,7 +105,7 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("naive_sort/src/com/company3/kernel.c"));
+            this.content = Files.readString(Path.of("opencl/naive_sort/src/com/company3/kernel.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
