@@ -25,12 +25,14 @@ public class RuntimeConfigurationSet {
     public void selectPlatform(int platformIndex) {
         this.platformIndex = platformIndex;
         platform           = platforms2[this.platformIndex];
+        System.out.println("selectPlatform: " + platform);
     }
 
 
     public void selectDevice(int deviceIndex) {
         this.deviceIndex   = deviceIndex;
         device             = devices2.get(this.deviceIndex);
+        System.out.println("selectDevice: " + device);
     }
 
 } // class RuntimeConfigurationSet

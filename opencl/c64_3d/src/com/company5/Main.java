@@ -1,13 +1,16 @@
-package com.company;
+package com.company5;
 
+import com.company.PlatformParametersSet;
+import com.company.RuntimeConfigurationSet;
 import org.jocl.CL;
+import com.company.Utils;
 
 
 public class Main {
 
     public static void main(String[] args) {
-        Utils.log("***** MAIN DEMO   *****");
-        Utils.log("***** com.company *****");
+        Utils.log("***** C64 3D       *****");
+        Utils.log("***** com.company5 *****");
 
         // -----
         Utils.log("0. OpenCL specific configuration");
@@ -16,10 +19,10 @@ public class Main {
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n = 1024*1024*1;
-        PlatformParametersSet   p = new PlatformParametersSet();
+        int n = 10;
+        PlatformParametersSet p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
-        KernelConfigurationSet  c = new KernelConfigurationSet(n);
+        KernelConfigurationSet c = new KernelConfigurationSet(n);
 
         // -----
         Utils.log("2. Get and print platform/devices parameters");
@@ -52,7 +55,7 @@ public class Main {
 
         // -----
         Utils.log("6. Run kernel, read buffer");
-        c.runKernel(9);
+        c.runKernel(0);
 
         // -----
         Utils.log("7. Release kernel, program, and memory objects");

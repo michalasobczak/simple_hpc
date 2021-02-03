@@ -19,7 +19,7 @@ public class Main {
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n = 1024*1024*20;
+        int n = 1024*1024;
         PlatformParametersSet p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
         KernelConfigurationSet c = new KernelConfigurationSet(n);
@@ -31,8 +31,8 @@ public class Main {
 
         // -----
         Utils.log("3. Platform and device selection");
-        r.selectPlatform(1);
-        r.selectDevice(1);
+        r.selectPlatform(0);
+        r.selectDevice(0);
 
         // -----
         Utils.log("4. Create input and output data");
@@ -56,7 +56,7 @@ public class Main {
 
         // -----
         Utils.log("6. Run kernel, read buffer");
-        c.runKernel(99);
+        c.runKernel(9);
 
         // -----
         Utils.log("7. Release kernel, program, and memory objects");
