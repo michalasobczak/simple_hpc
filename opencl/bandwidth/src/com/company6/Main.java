@@ -1,4 +1,4 @@
-package com.company4;
+package com.company6;
 
 import com.company.PlatformParametersSet;
 import com.company.RuntimeConfigurationSet;
@@ -9,8 +9,8 @@ import com.company.Utils;
 public class Main {
 
     public static void main(String[] args) {
-        Utils.log("***** PI EST MC    *****");
-        Utils.log("***** com.company4 *****");
+        Utils.log("***** BANDWIDTH    *****");
+        Utils.log("***** com.company6 *****");
 
         // -----
         Utils.log("0. OpenCL specific configuration");
@@ -32,12 +32,11 @@ public class Main {
         // -----
         Utils.log("3. Platform and device selection");
         r.selectPlatform(1);
-        r.selectDevice(2);
+        r.selectDevice(1);
 
         // -----
         Utils.log("4. Create input and output data");
         c.initializeSrcArrayA();
-        c.initializeSrcArrayB();
         c.initializeDstArray();
         c.generateSampleRandomData();
         c.printSrcArray();
@@ -56,7 +55,7 @@ public class Main {
 
         // -----
         Utils.log("6. Run kernel, read buffer");
-        c.runKernel(99);
+        c.runKernel(9);
 
         // -----
         Utils.log("7. Release kernel, program, and memory objects");

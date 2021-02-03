@@ -3,12 +3,14 @@
 ## OpenCL
 
 There are few examples available:
-- main module
-- reusing_code
-- naive_sort (TODO)
-- pi_est_monte_carlo
+- main module (opencl/src)
+- reusing_code (to show how Java submodules works)
+- naive_sort (array indexing)
+- pi_est_monte_carlo (estimating PI by direct relation between square and circle)
+- WIP: c64_3d (orthographic and perspective calculations)
+- WIP: bandwidth (set of tests checking various scalar operation performance)
 
-In order to run samples (ie. reusing_code, com.company2.Main), try as it as follows:
+In order to run samples (i.e. reusing_code, com.company2.Main), try as it as follows:
 
 ```
 $HOME/.jdks/openjdk-15.0.2/bin/java 
