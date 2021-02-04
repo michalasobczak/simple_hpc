@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Random;
 import static org.jocl.CL.*;
 import static org.jocl.CL.CL_MEM_READ_WRITE;
 
@@ -17,8 +15,6 @@ import static org.jocl.CL.CL_MEM_READ_WRITE;
 class KernelConfigurationSet {
     private final int n;
 
-//    public static int[] srcArrayA;
-//    public static int[] dstArray;
     public static Pointer srcA;
     public static Pointer dst;
 
@@ -36,30 +32,18 @@ class KernelConfigurationSet {
 
 
     public KernelConfigurationSet(int n) {
-        this.n = 24;
+        this.n = Main.n;
         System.out.println(" - KernelConfigurationSet");
     }
 
 
-//    public int[] getSrcArrayA() {
-//        System.out.println(" - Allocating sample data");
-//        return Main.vertices_3d;
-//    }
-
-
-//    public int[] getDstArrayA() {
-//        System.out.println(" - Allocating return buffer");
-//        return Main.vertices_2d;
-//    }
-
-
     public void initializeSrcArrayA() {
-        srcA      = Pointer.to(Main.vertices_3d);
+        srcA = Pointer.to(Main.vertices_3d);
     }
 
 
     public void initializeDstArray() {
-        dst       = Pointer.to(Main.vertices_2d);
+        dst = Pointer.to(Main.vertices_2d);
     }
 
 

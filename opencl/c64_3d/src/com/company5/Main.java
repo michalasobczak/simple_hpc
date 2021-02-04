@@ -41,13 +41,10 @@ public class Main extends JFrame {
         for (int i=0; i<=size-1; i++) {
             vertices_3d[i] = vector.get(i);
         }
-
         vertices_3d_count = vertices_3d.length;
         vertices_2d_count = vertices_3d.length;
         vertices_2d = new int[vertices_3d.length];
-        n = vertices_3d.length;
-
-
+        Main.n = vertices_3d.length;
 
         Utils.log("***** C64 3D       *****");
         Utils.log("***** com.company5 *****");
@@ -114,6 +111,7 @@ public class Main extends JFrame {
             }
         });
     } // main
+
 
     public Main() {
         super("Passing OpenCL calculations to UI");
