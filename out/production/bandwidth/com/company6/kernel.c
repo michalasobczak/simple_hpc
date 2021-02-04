@@ -13,5 +13,5 @@ __kernel void sampleKernel(__global const float *a,
     //__private int gs  = gc*ls;
     //__private int pr = a[eid]*(gc*ls)*100;
     // calc
-    d[gid] = 1; //a[gid];
+    d[gid] = a[gid];
 }

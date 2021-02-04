@@ -143,15 +143,24 @@ class KernelConfigurationSet {
 
 
     public void runKernel(int iterations) {
+        long sumCalc = 0;
+        long sumRead = 0;
         for (int i = 0; i<=iterations; i++) {
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             // Execute the kernel
             clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, null);
+            long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
+            System.out.println("Took OpenCL calculate: " + String.valueOf(bTime - aTime) + "ms");
+            sumCalc = sumCalc + (bTime - aTime);
             // Read the output data
             clEnqueueReadBuffer(this.commandQueue, this.memObjects[2], CL_TRUE, 0, (long) n * Sizeof.cl_int, KernelConfigurationSet.dst, 0, null, null);
-            long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
-            System.out.println("Took OpenCL: " + String.valueOf(bTime - aTime) + "ms");
+            bTime = ZonedDateTime.now().toInstant().toEpochMilli();
+            System.out.println("Took OpenCL read result: " + String.valueOf(bTime - aTime) + "ms");
+            sumRead = sumRead + (bTime - aTime);
         }
+
+        System.out.println("Calc AVG: " + sumCalc/iterations);
+        System.out.println("Read AVG: " + sumRead/iterations);
     }
 
 
