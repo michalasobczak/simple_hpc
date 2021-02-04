@@ -71,8 +71,8 @@ public class Main extends JFrame {
 
         // -----
         Utils.log("3. Platform and device selection");
-        r.selectPlatform(0);
-        r.selectDevice(0);
+        r.selectPlatform(1);
+        r.selectDevice(1);
 
         // -----
         Utils.log("4. Create input and output data");
@@ -123,7 +123,7 @@ public class Main extends JFrame {
     }
     void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        for (int i=0; i<=Main.vertices_2d.length-1; i+=2) {
+        for (int i=0; i<=Main.vertices_2d.length-2; i+=2) {
             g2d.drawLine(Main.vertices_2d[i], Main.vertices_2d[i+1], Main.vertices_2d[i], Main.vertices_2d[i+1]);
         }
     }

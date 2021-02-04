@@ -23,7 +23,7 @@ __kernel void sampleKernel(__global const int *a,
         int th_x     = 0;
         int th_y     = 0;
         int th_z     = 0;
-        int start_x  = 700;
+        int start_x  = 100;
         int start_y  = 700;
         int start_z  = 500;
         int rxA      = 0;
