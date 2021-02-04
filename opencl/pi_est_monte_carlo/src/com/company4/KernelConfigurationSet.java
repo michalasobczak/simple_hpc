@@ -158,9 +158,8 @@ class KernelConfigurationSet {
             System.out.println("Took OpenCL read result: " + String.valueOf(bTime - aTime) + "ms");
             sumRead = sumRead + (bTime - aTime);
         }
-
-        System.out.println("Calc AVG: " + sumCalc/iterations);
-        System.out.println("Read AVG: " + sumRead/iterations);
+        System.out.println("Calc AVG: " + sumCalc/(iterations+1));
+        System.out.println("Read AVG: " + sumRead/(iterations+1));
     }
 
 

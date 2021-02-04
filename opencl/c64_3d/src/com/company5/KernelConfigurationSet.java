@@ -13,11 +13,12 @@ import static org.jocl.CL.*;
 import static org.jocl.CL.CL_MEM_READ_WRITE;
 
 
+
 class KernelConfigurationSet {
     private final int n;
 
-    public static float[] srcArrayA;
-    public static float[] dstArray;
+//    public static int[] srcArrayA;
+//    public static int[] dstArray;
     public static Pointer srcA;
     public static Pointer dst;
 
@@ -35,48 +36,41 @@ class KernelConfigurationSet {
 
 
     public KernelConfigurationSet(int n) {
-        this.n = n;
+        this.n = 24;
         System.out.println(" - KernelConfigurationSet");
     }
 
 
-    public float[] getSrcArrayA() {
-        System.out.println(" - Allocating sample data");
-        return new float[this.n];
-    }
+//    public int[] getSrcArrayA() {
+//        System.out.println(" - Allocating sample data");
+//        return Main.vertices_3d;
+//    }
 
 
-    public float[] getDstArrayA() {
-        System.out.println(" - Allocating return buffer");
-        return new float[this.n];
-    }
+//    public int[] getDstArrayA() {
+//        System.out.println(" - Allocating return buffer");
+//        return Main.vertices_2d;
+//    }
 
 
     public void initializeSrcArrayA() {
-        srcArrayA = this.getSrcArrayA();
-        srcA      = Pointer.to(srcArrayA);
+        srcA      = Pointer.to(Main.vertices_3d);
     }
 
 
     public void initializeDstArray() {
-        dstArray  = this.getDstArrayA();
-        dst       = Pointer.to(dstArray);
+        dst       = Pointer.to(Main.vertices_2d);
     }
 
 
     public void generateSampleRandomData() {
-        System.out.println(" - Started randomizing");
-        Random rd = new Random();
-        for (int i = 0; i <= n - 1; i++) {
-            srcArrayA[i] = rd.nextFloat();
-        }
-        System.out.println(" - Finished randomizing");
+        System.out.println(" - NOP");
     }
 
 
     public void printSrcArray() {
-        if (this.n <= 1024) {
-            System.out.println(java.util.Arrays.toString(srcArrayA));
+        if (Main.n <= 1024) {
+            System.out.println(java.util.Arrays.toString(Main.vertices_3d));
         }
     }
 
@@ -98,8 +92,8 @@ class KernelConfigurationSet {
 
     public void createBuffers() {
         // Allocate the memory objects for the input- and output data
-        this.memObjects[0] = clCreateBuffer(this.context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, (long) Sizeof.cl_float * this.n, KernelConfigurationSet.srcA, null);
-        this.memObjects[1] = clCreateBuffer(this.context, CL_MEM_READ_WRITE, (long) Sizeof.cl_float * this.n, null, null);
+        this.memObjects[0] = clCreateBuffer(this.context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, (long) Sizeof.cl_int * Main.n, KernelConfigurationSet.srcA, null);
+        this.memObjects[1] = clCreateBuffer(this.context, CL_MEM_READ_WRITE, (long) Sizeof.cl_int * Main.n, null, null);
     }
 
 
@@ -127,24 +121,30 @@ class KernelConfigurationSet {
 
 
     public void configureWork() {
-        this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 1 };
+        this.global_work_size = new long[] { Main.n } ;
+        this.local_work_size  = new long[] { 3 };
     }
 
 
     public void runKernel(int iterations) {
+        long sumCalc = 0;
+        long sumRead = 0;
         for (int i = 0; i<=iterations; i++) {
             // Execute the kernel
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, null);
             long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
             System.out.println("Took OpenCL calculate: " + String.valueOf(bTime - aTime) + "ms");
+            sumCalc = sumCalc + (bTime - aTime);
             // Read the output data
             aTime = ZonedDateTime.now().toInstant().toEpochMilli();
-            clEnqueueReadBuffer(this.commandQueue, this.memObjects[1], CL_TRUE, 0, (long) n * Sizeof.cl_float, KernelConfigurationSet.dst, 0, null, null);
+            clEnqueueReadBuffer(this.commandQueue, this.memObjects[1], CL_TRUE, 0, (long) Main.n * Sizeof.cl_int, KernelConfigurationSet.dst, 0, null, null);
             bTime = ZonedDateTime.now().toInstant().toEpochMilli();
             System.out.println("Took OpenCL read result: " + String.valueOf(bTime - aTime) + "ms");
+            sumRead = sumRead + (bTime - aTime);
         }
+        System.out.println("Calc AVG: " + sumCalc/(iterations+1));
+        System.out.println("Read AVG: " + sumRead/(iterations+1));
     }
 
 
@@ -159,18 +159,9 @@ class KernelConfigurationSet {
 
 
     public void printResults() {
-        ArrayList<Float> nonZeroElements = new ArrayList<Float>();
-        for (float tmp : dstArray) {
-            if (tmp != 0.0) {
-                nonZeroElements.add(tmp);
-            }
+        if (Main.n <= 1024) {
+            System.out.println("Result: " + java.util.Arrays.toString(Main.vertices_2d));
         }
-        if (this.n <= 1024) {
-            System.out.println("Result: " + java.util.Arrays.toString(KernelConfigurationSet.dstArray));
-            System.out.println("nonZeroElements: " + nonZeroElements.toString());
-        }
-        System.out.println("nonZeroElements count: " + nonZeroElements.size());
-        System.out.println("Last result: " + KernelConfigurationSet.srcArrayA[n-1] + " giving " + KernelConfigurationSet.dstArray[n-1]);
     }
 
 } // class Configuration
