@@ -51,4 +51,10 @@ same time you need to power SD2IEC from external power source such as USB, becau
 tape drive connector on your C64 computer.
 
 
+## Using disk drive images (d64)
+
+In order to use disk drive images you must create one. In VICE menu there is special item for this. But first you need to auto attach program to run, then secondly you attach drive itself. This way, program will be loaded into memory and can be run against attached drive. Please find in the repository a sample disk drive image and program to write and read.
+
+
+
 
