@@ -5,7 +5,19 @@ repository periodically as it changes quite fast. The main goal for all of submo
 software and hardware performance capabilities, still using commodity utilities. I try not to step into enterprise 
 grade or high pricing solutions willing to accomplish my tasks within modest budget and time frame.
 
-## OpenCL
+## Part 1 - technicalities
+Please find TINA TI examples from the first part of series.
+
+## Part 2 - hardware (home computing)
+WIP
+
+## Part 3 - multimedia computing
+WIP
+
+## Part 4 -  OpenGL
+WIP
+
+## Part 5 -  OpenCL
 
 ### BOM
 
@@ -37,23 +49,5 @@ It will work properly assuming you:
 You can also run it directly from IntelliJ or other IDE.
 
 
-## OpenGL
-WIP
-
-## CUDA
-WIP
-
-## zmap
-WIP
-
-## Ruby RSS
-WIP
-
-## Ruby HTTP
-WIP
-
-## PostgreSQL 12  
-WIP
-
-## Hardware
+## Part 6 - data mining
 WIP
