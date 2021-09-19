@@ -5,7 +5,7 @@ repository periodically as it changes quite fast. The main goal for all of submo
 software and hardware performance capabilities, still using commodity utilities. I try not to step into enterprise 
 grade or high pricing solutions willing to accomplish my tasks within modest budget and time frame.
 
-## Part 1 - technicalities
+## Part 1 - "Podstawy elektroniki i budowa komputera w symulatorze", technicalities (SeriesPartOne)
 Please find TINA TI examples from the first part of series.
 
 ## Part 2 - hardware (home computing)
