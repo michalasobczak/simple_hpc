@@ -4,14 +4,13 @@ import org.jocl.Pointer;
 import org.jocl.Sizeof;
 import org.jocl.cl_device_id;
 import org.jocl.cl_platform_id;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import static org.jocl.CL.*;
+
 
 public class PlatformParametersSet {
     private List<cl_device_id> devices = new ArrayList<cl_device_id>();

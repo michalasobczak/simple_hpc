@@ -2,7 +2,6 @@ package com.michalasobczak.opencl;
 
 import org.jocl.cl_device_id;
 import org.jocl.cl_platform_id;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,6 @@ public class RuntimeConfigurationSet {
 
     public RuntimeConfigurationSet() {
         System.out.println(" - RuntimeConfigurationSet");
-
     }
 
 
