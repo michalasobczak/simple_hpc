@@ -1,4 +1,4 @@
-package com.company;
+package com.michalasobczak.opencl;
 
 import org.jocl.cl_device_id;
 import org.jocl.cl_platform_id;

@@ -1,4 +1,4 @@
-package com.company;
+package com.michalasobczak.opencl;
 
 public class Utils {
 

@@ -1,13 +1,12 @@
-package com.company6;
+package com.michalasobczak.bandwidth;
 
-import com.company.RuntimeConfigurationSet;
+import com.michalasobczak.opencl.RuntimeConfigurationSet;
 import org.jocl.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Random;
 import static org.jocl.CL.*;
 import static org.jocl.CL.CL_MEM_READ_WRITE;
@@ -106,7 +105,7 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("opencl/bandwidth/src/com/company6/kernel.c"));
+            this.content = Files.readString(Path.of("opencl/bandwidth/src/com/michalasobczak/bandwidth/kernel.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,7 +134,7 @@ class KernelConfigurationSet {
     public void runKernel(int iterations) {
         long sumCalc = 0;
         long sumRead = 0;
-        for (int i = 0; i<=iterations; i++) {
+        for (int i = 0; i<iterations; i++) {
             // Execute the kernel
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, null);

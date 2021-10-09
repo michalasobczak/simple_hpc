@@ -1,16 +1,16 @@
-package com.company6;
+package com.michalasobczak.bandwidth;
 
-import com.company.PlatformParametersSet;
-import com.company.RuntimeConfigurationSet;
+import com.michalasobczak.opencl.PlatformParametersSet;
+import com.michalasobczak.opencl.RuntimeConfigurationSet;
 import org.jocl.CL;
-import com.company.Utils;
+import com.michalasobczak.opencl.Utils;
 
 
 public class Main {
 
     public static void main(String[] args) {
-        Utils.log("***** BANDWIDTH    *****");
-        Utils.log("***** com.company6 *****");
+        Utils.log("***** BANDWIDTH                    *****");
+        Utils.log("***** com.michalasobczak.bandwidth *****");
 
         // -----
         Utils.log("0. OpenCL specific configuration");
