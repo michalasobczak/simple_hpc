@@ -1,6 +1,7 @@
 package com.michalasobczak.bandwidth;
 
 import com.michalasobczak.opencl.RuntimeConfigurationSet;
+import com.michalasobczak.opencl.Utils;
 import org.jocl.*;
 
 import java.io.IOException;
@@ -105,7 +106,7 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("opencl/bandwidth/src/com/michalasobczak/bandwidth/kernel.c"));
+            this.content = Files.readString(Path.of("bandwidth/src/com/michalasobczak/bandwidth/kernel.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -127,30 +128,23 @@ class KernelConfigurationSet {
 
     public void configureWork() {
         this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 1 };
+        this.local_work_size  = new long[] { 8192 };
     }
 
 
     public void runKernel(int iterations) {
-        long sumCalc = 0;
-        long sumRead = 0;
+        long sumRun = 0;
         for (int i = 0; i<iterations; i++) {
-            // Execute the kernel
+            // Execute the kernel & Read the output data
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, null);
-            long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
-            System.out.println("Took OpenCL calculate: " + String.valueOf(bTime - aTime) + "ms");
-            sumCalc = sumCalc + (bTime - aTime);
-            // Read the output data
-            aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             clEnqueueReadBuffer(this.commandQueue, this.memObjects[1], CL_TRUE, 0, (long) n * Sizeof.cl_float, KernelConfigurationSet.dst, 0, null, null);
-            bTime = ZonedDateTime.now().toInstant().toEpochMilli();
-            System.out.println("Took OpenCL read result: " + String.valueOf(bTime - aTime) + "ms");
-            sumRead = sumRead + (bTime - aTime);
+            long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
+            System.out.println("Took OpenCL calc&read result: " + String.valueOf(bTime - aTime) + "ms");
+            sumRun = sumRun + (bTime - aTime);
         }
 
-        System.out.println("Calc AVG: " + sumCalc/iterations);
-        System.out.println("Read AVG: " + sumRead/iterations);
+        System.out.println("Calc&Read AVG: " + sumRun/iterations);
     }
 
 
