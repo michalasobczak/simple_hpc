@@ -1,13 +1,12 @@
-package com.company5;
+package com.michalasobczak.c64_3d;
 
-import com.company.PlatformParametersSet;
-import com.company.RuntimeConfigurationSet;
+import com.michalasobczak.opencl.PlatformParametersSet;
+import com.michalasobczak.opencl.RuntimeConfigurationSet;
+import com.michalasobczak.opencl.Utils;
 import org.jocl.CL;
-import com.company.Utils;
+
 
 import java.awt.*;
-import java.awt.geom.Line2D;
-import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,8 +44,8 @@ public class Main extends JFrame {
         vertices_2d = new int[vertices_3d.length];
         Main.n = vertices_3d.length;
 
-        Utils.log("***** C64 3D       *****");
-        Utils.log("***** com.company5 *****");
+        Utils.log("***** C64 3D                    *****");
+        Utils.log("***** com.michalasobczak.c64_3d *****");
 
         // -----
         Utils.log("0. OpenCL specific configuration");
@@ -91,7 +90,7 @@ public class Main extends JFrame {
 
         // -----
         Utils.log("6. Run kernel, read buffer");
-        c.runKernel(0);
+        c.runKernel(1);
 
         // -----
         // NOTE: releasing resources prevents from creating UI elements here after

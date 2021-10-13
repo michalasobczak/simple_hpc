@@ -1,6 +1,6 @@
-package com.company3;
+package com.michalasobczak.naive_sort;
 
-import com.company.RuntimeConfigurationSet;
+import com.michalasobczak.opencl.RuntimeConfigurationSet;
 import org.jocl.*;
 
 import java.io.IOException;
@@ -106,7 +106,7 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("opencl/naive_sort/src/com/company3/kernel.c"));
+            this.content = Files.readString(Path.of("opencl/naive_sort/src/com/michalasobczak/naive_sort/kernel.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -128,21 +128,17 @@ class KernelConfigurationSet {
 
     public void configureWork() {
         this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 1 };
+        this.local_work_size  = new long[] { 32 };
     }
 
 
     public void runKernel(int iterations) {
-        for (int i = 0; i<=iterations; i++) {
-            // Execute the kernel
+        for (int i = 0; i<iterations; i++) {
+            // Execute the kernel & Read the output data
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, null);
-            long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
-            System.out.println("Took OpenCL calculate: " + String.valueOf(bTime - aTime) + "ms");
-            // Read the output data
-            aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             clEnqueueReadBuffer(this.commandQueue, this.memObjects[1], CL_TRUE, 0, (long) n * Sizeof.cl_float * 100, KernelConfigurationSet.dst, 0, null, null);
-            bTime = ZonedDateTime.now().toInstant().toEpochMilli();
+            long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
             System.out.println("Took OpenCL read result: " + String.valueOf(bTime - aTime) + "ms");
         }
     }

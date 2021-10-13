@@ -1,16 +1,17 @@
-package com.company3;
+package com.michalasobczak.pi_est_monte_carlo;
 
-import com.company.PlatformParametersSet;
-import com.company.RuntimeConfigurationSet;
+import com.michalasobczak.opencl.PlatformParametersSet;
+import com.michalasobczak.opencl.RuntimeConfigurationSet;
+import com.michalasobczak.opencl.Utils;
 import org.jocl.CL;
-import com.company.Utils;
+
 
 
 public class Main {
 
     public static void main(String[] args) {
-        Utils.log("***** NAIVE SORT   *****");
-        Utils.log("***** com.company3 *****");
+        Utils.log("***** PI EST MC                             *****");
+        Utils.log("***** com.michalasobczak.pi_est_monte_carlo *****");
 
         // -----
         Utils.log("0. OpenCL specific configuration");
@@ -19,7 +20,7 @@ public class Main {
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n = 100;
+        int n = 1024*1024*160;
         PlatformParametersSet p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
         KernelConfigurationSet c = new KernelConfigurationSet(n);
@@ -37,6 +38,7 @@ public class Main {
         // -----
         Utils.log("4. Create input and output data");
         c.initializeSrcArrayA();
+        c.initializeSrcArrayB();
         c.initializeDstArray();
         c.generateSampleRandomData();
         c.printSrcArray();
@@ -55,7 +57,7 @@ public class Main {
 
         // -----
         Utils.log("6. Run kernel, read buffer");
-        c.runKernel(0);
+        c.runKernel(9);
 
         // -----
         Utils.log("7. Release kernel, program, and memory objects");
