@@ -16,5 +16,5 @@ __kernel void sampleKernel(__global const float *a,
       myArray[i] = i;
     }
 
-    d[gid] = (a[gid] * 2.0) - myArray[gid];
+    d[gid] = (a[gid] * 2.0) - 1.0;
 }
