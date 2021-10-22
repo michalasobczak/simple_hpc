@@ -110,7 +110,8 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("bandwidth/src/com/michalasobczak/bandwidth/kernel.c"));
+            this.content = Files.readString(Path.of("bandwidth/src/com" +
+                    "/michalasobczak/bandwidth/kernel4.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -132,7 +133,7 @@ class KernelConfigurationSet {
 
     public void configureWork() {
         this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 32 };
+        this.local_work_size  = new long[] { 4 };
     }
 
 

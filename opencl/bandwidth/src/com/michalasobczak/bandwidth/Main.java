@@ -19,7 +19,7 @@ public class Main {
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n = 32*1024*1024;
+        int n = 16;
         PlatformParametersSet p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
         KernelConfigurationSet c = new KernelConfigurationSet(n);
