@@ -111,7 +111,7 @@ class KernelConfigurationSet {
         this.content = new String("");
         try {
             this.content = Files.readString(Path.of("bandwidth/src/com" +
-                    "/michalasobczak/bandwidth/kernel8.c"));
+                    "/michalasobczak/bandwidth/kernel9.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
