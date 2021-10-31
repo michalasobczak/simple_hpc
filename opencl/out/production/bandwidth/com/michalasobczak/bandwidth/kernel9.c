@@ -1,8 +1,6 @@
 void first(int *ptr) {
-  ptr = 1;
+  *ptr = 2;
 }
-
-
 
 __kernel void sampleKernel(__global const float *a,
                            __global float *d)
@@ -13,8 +11,9 @@ __kernel void sampleKernel(__global const float *a,
     __local  int *ptr1;
     __global int *ptr2;
 
-    //first(ptr1);
-    //first(ptr2);
+    first(&ptr1);
+    first(&ptr2);
 
-    printf("%u\n");
+    printf("ptr1: %u\n", ptr1);
+    printf("ptr2: %u\n", ptr2);
 }
