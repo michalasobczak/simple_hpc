@@ -111,7 +111,7 @@ class KernelConfigurationSet {
         this.content = new String("");
         try {
             this.content = Files.readString(Path.of("bandwidth/src/com" +
-                    "/michalasobczak/bandwidth/kernel9.c"));
+                    "/michalasobczak/bandwidth/kernel11.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,7 +122,7 @@ class KernelConfigurationSet {
         // Create the program from the source code
         this.program = clCreateProgramWithSource(this.context, 1, new String[]{ this.content }, null, null);
         // Build the program
-        clBuildProgram(this.program, 0, null, "-cl-std=CL1.2", null, null);
+        clBuildProgram(this.program, 0, null, "-cl-std=CL1.1", null, null);
         // Create the kernel
         this.kernel = clCreateKernel(this.program, "sampleKernel", null);
         // Set the arguments for the kernel

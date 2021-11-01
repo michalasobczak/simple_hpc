@@ -5,19 +5,15 @@ void first(int *ptr) {
 __kernel void sampleKernel(__global const float *a, __global float *d) {
     __private int gid = get_global_id(0);
     __private int group_id = get_group_id(0);
-
     int var;
-    int *ptr1 = 0;
-    printf("ptr1/0: %i\n", ptr1);
+    int *ptr = 0;
+    printf("%i, %p\n", gid, ptr);
     var = 4;
-    ptr1 = &var;
-    printf("ptr1/a: %i\n", ptr1);
-    printf("ptr1/a: %i\n", *ptr1);
-    *ptr1 = *ptr1 + 2;
-    printf("ptr1/b: %i\n", ptr1);
-    printf("ptr1/b: %i\n", *ptr1);
-    first(ptr1);
-    printf("ptr1/c: %i\n", ptr1);
-    printf("ptr1/c: %i\n", *ptr1);
-    //d[gid] = *ptr1;
+    ptr = &var;
+    printf("%i, %p, %i\n", gid, ptr, (int)*ptr);
+    *ptr = *ptr + gid;
+    printf("%i, %p, %i\n", gid, ptr, (int)*ptr);
+    first(ptr);
+    printf("%i, %p, %i\n", gid, ptr, (int)*ptr);
+    d[gid] = (float)*ptr;
 }
