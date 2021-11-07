@@ -7,6 +7,7 @@ __kernel void sampleKernel(__global const float *a, __global float *d) {
     __private int group_id = get_group_id(0);
     __local int *ptr1;
     ptr1 = 0;
+    printf("ptr1: %i, %p\n", gid, ptr1);
     first(&ptr1);
-    printf("ptr1: %i, %u\n", gid, ptr1);
+    printf("ptr1: %i, %p\n", gid, ptr1);
 }
