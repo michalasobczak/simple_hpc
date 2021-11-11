@@ -26,7 +26,7 @@ public class Main extends JFrame {
 
     public static void main(String[] args) throws IOException {
         ArrayList<Integer> vector = new ArrayList<Integer>();
-        List<String> model = Files.readAllLines(Path.of("opencl/c64_3d/sphere.model"));
+        List<String> model = Files.readAllLines(Path.of("sphere.model"));
         for (String line : model) {
             String[] parsedLine = line.split(",");
             vector.add(Integer.parseInt(parsedLine[0]));
@@ -113,7 +113,7 @@ public class Main extends JFrame {
 
     public Main() {
         super("Passing OpenCL calculations to UI");
-        setSize(1600, 1200);
+        setSize(1000, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }

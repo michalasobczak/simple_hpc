@@ -84,7 +84,7 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("opencl/c64_3d/src/com/michalasobczak/c64_3d/kernel.c"));
+            this.content = Files.readString(Path.of("src/com/michalasobczak/c64_3d/kernel.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
