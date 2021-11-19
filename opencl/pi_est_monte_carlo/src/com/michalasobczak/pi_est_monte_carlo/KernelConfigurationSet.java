@@ -115,7 +115,7 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("opencl/pi_est_monte_carlo/src/com/michalasobczak/pi_est_monte_carlo/kernel.c"));
+            this.content = Files.readString(Path.of("pi_est_monte_carlo/src/com/michalasobczak/pi_est_monte_carlo/kernel.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
