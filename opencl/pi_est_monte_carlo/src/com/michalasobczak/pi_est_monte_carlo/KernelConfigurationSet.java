@@ -1,5 +1,6 @@
 package com.michalasobczak.pi_est_monte_carlo;
 
+import com.michalasobczak.opencl.ExecutionStatistics;
 import com.michalasobczak.opencl.RuntimeConfigurationSet;
 import org.jocl.*;
 
@@ -7,7 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import static org.jocl.CL.*;
 import static org.jocl.CL.CL_MEM_READ_WRITE;
@@ -59,14 +62,29 @@ class KernelConfigurationSet {
     public void initializeSrcArrayA() {
         srcArrayA = this.getSrcArrayA();
         srcA      = Pointer.to(srcArrayA);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     public void initializeSrcArrayB() {
         srcArrayB = this.getSrcArrayB();
         srcB      = Pointer.to(srcArrayB);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     public void initializeDstArray() {
         dstArray  = this.getDstArrayA();
         dst       = Pointer.to(dstArray);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -78,6 +96,11 @@ class KernelConfigurationSet {
             srcArrayB[i] = rd.nextFloat();
         }
         System.out.println(" - Finished randomizing");
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -100,7 +123,9 @@ class KernelConfigurationSet {
 
     public void createCommandQueue() {
         // Create a command-queue for the selected device
-        this.commandQueue = clCreateCommandQueue(this.context, RuntimeConfigurationSet.device, 0, null);
+        long properties = 0;
+        properties |= CL.CL_QUEUE_PROFILING_ENABLE;
+        this.commandQueue = clCreateCommandQueue(this.context, RuntimeConfigurationSet.device, properties, null);
     }
 
 
@@ -146,14 +171,30 @@ class KernelConfigurationSet {
         long sumRun = 0;
         for (int i = 0; i<iterations; i++) {
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
-            // Execute the kernel & Read the output data
-            clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, null);
-            clEnqueueReadBuffer(this.commandQueue, this.memObjects[2], CL_TRUE, 0, (long) n * Sizeof.cl_int, KernelConfigurationSet.dst, 0, null, null);
+            //
+                // Execute the kernel & Read the output data
+                cl_event kernelEvent0 = new cl_event();
+                clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, kernelEvent0);
+                //
+                System.out.println("Waiting for kernel events...");
+                CL.clWaitForEvents(1, new cl_event[]{kernelEvent0});
+                //
+                cl_event readEvent0 = new cl_event();
+                clEnqueueReadBuffer(this.commandQueue, this.memObjects[2], CL_TRUE, 0, (long) n * Sizeof.cl_int, KernelConfigurationSet.dst, 0, null, readEvent0);
+                //
+                System.out.println("Waiting for read events...");
+                CL.clWaitForEvents(1, new cl_event[]{readEvent0});
+            //
             long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
-            System.out.println("Took OpenCL read result: " + String.valueOf(bTime - aTime) + "ms");
             sumRun = sumRun + (bTime - aTime);
+            // Print the timing information for the commands
+            ExecutionStatistics executionStatistics = new ExecutionStatistics();
+            executionStatistics.addEntry("kernel0", kernelEvent0);
+            executionStatistics.addEntry("  read0", readEvent0);
+            executionStatistics.print();
+            System.out.println("Took OpenCL calc&read result: " + String.valueOf(bTime - aTime) + "ms\n");
+            System.out.println("\n");
         }
-
         System.out.println("Calc&Read AVG: " + sumRun/iterations);
     }
 
@@ -172,7 +213,6 @@ class KernelConfigurationSet {
         if (this.n <= 1024) {
             System.out.println("Result: " + java.util.Arrays.toString(KernelConfigurationSet.dstArray));
         }
-
         float nf     = n*1.0F;
         int sum      = Arrays.stream(dstArray).sum();
         float result = (4.0F * sum) / nf;
