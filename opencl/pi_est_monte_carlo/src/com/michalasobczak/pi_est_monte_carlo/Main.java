@@ -20,7 +20,7 @@ public class Main {
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n = 1024 * 1024 * 128;
+        int n = 1024 * 1024 * 32;
         PlatformParametersSet p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
         KernelConfigurationSet c = new KernelConfigurationSet(n);
@@ -57,7 +57,7 @@ public class Main {
 
         // -----
         Utils.log("6. Run kernel, read buffer");
-        c.runKernel(20);
+        c.runKernel(5);
 
         // -----
         Utils.log("7. Release kernel, program, and memory objects");

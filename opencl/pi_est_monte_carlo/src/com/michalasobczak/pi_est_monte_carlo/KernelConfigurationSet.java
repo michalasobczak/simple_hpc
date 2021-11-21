@@ -172,6 +172,7 @@ class KernelConfigurationSet {
 
 
     public void runKernel(int iterations) {
+        System.out.println("Start ");
         boolean withWriteEvent = true;
         long sumRun = 0;
         for (int i = 0; i<iterations; i++) {
@@ -183,17 +184,17 @@ class KernelConfigurationSet {
                 if (withWriteEvent) {
                     System.out.println("write 0");
                     clEnqueueWriteBuffer(this.commandQueue,this.memObjects[0], true, 0, 0, KernelConfigurationSet.srcA, 0, null, writeEvent0);
-                    clFinish(this.commandQueue);
+                    //clFinish(this.commandQueue);
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     System.out.println("write 1");
                     clEnqueueWriteBuffer(this.commandQueue,this.memObjects[1], true, 0, 0, KernelConfigurationSet.srcB, 0, null, writeEvent1);
-                    clFinish(this.commandQueue);
+                    //clFinish(this.commandQueue);
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -201,7 +202,7 @@ class KernelConfigurationSet {
                     CL.clWaitForEvents(1, new cl_event[]{writeEvent0});
                     CL.clWaitForEvents(1, new cl_event[]{writeEvent1});
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -220,6 +221,7 @@ class KernelConfigurationSet {
             //
             long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
             sumRun = sumRun + (bTime - aTime);
+            System.out.println("Finish");
             // Print the timing information for the commands
             ExecutionStatistics executionStatistics = new ExecutionStatistics();
             if (withWriteEvent) {
