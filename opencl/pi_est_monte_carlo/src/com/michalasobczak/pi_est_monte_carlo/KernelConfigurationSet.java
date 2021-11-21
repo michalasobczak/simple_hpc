@@ -167,18 +167,17 @@ class KernelConfigurationSet {
 
     public void configureWork() {
         this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 2 };
+        this.local_work_size  = new long[] { 32 };
     }
 
 
     public void runKernel(int iterations) {
-        System.out.println("Start ");
         boolean withWriteEvent = true;
         long sumRun = 0;
         for (int i = 0; i<iterations; i++) {
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             //
-                //
+                System.out.println("Start.....");
                 cl_event writeEvent0 = new cl_event();
                 cl_event writeEvent1 = new cl_event();
                 if (withWriteEvent) {
@@ -221,7 +220,7 @@ class KernelConfigurationSet {
             //
             long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
             sumRun = sumRun + (bTime - aTime);
-            System.out.println("Finish");
+            //
             // Print the timing information for the commands
             ExecutionStatistics executionStatistics = new ExecutionStatistics();
             if (withWriteEvent) {
