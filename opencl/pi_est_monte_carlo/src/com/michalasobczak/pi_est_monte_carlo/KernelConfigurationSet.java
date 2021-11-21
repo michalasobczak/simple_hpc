@@ -21,7 +21,7 @@ class KernelConfigurationSet {
 
     public static float[] srcArrayA;
     public static float[] srcArrayB;
-    public static int[] dstArray;
+    public static float[] dstArray;
     public static Pointer srcA;
     public static Pointer srcB;
     public static Pointer dst;
@@ -53,9 +53,9 @@ class KernelConfigurationSet {
         System.out.println(" - Allocating sample data");
         return new float[this.n];
     }
-    public int[] getDstArrayA() {
+    public float[] getDstArrayA() {
         System.out.println(" - Allocating return buffer");
-        return new int[this.n];
+        return new float[this.n];
     }
 
 
@@ -63,7 +63,7 @@ class KernelConfigurationSet {
         srcArrayA = this.getSrcArrayA();
         srcA      = Pointer.to(srcArrayA);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -72,7 +72,7 @@ class KernelConfigurationSet {
         srcArrayB = this.getSrcArrayB();
         srcB      = Pointer.to(srcArrayB);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -81,7 +81,7 @@ class KernelConfigurationSet {
         dstArray  = this.getDstArrayA();
         dst       = Pointer.to(dstArray);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -91,13 +91,13 @@ class KernelConfigurationSet {
     public void generateSampleRandomData() {
         System.out.println(" - Started randomizing");
         Random rd = new Random();
-        for (int i = 0; i <= n - 1; i++) {
+        for (int i = 0; i < n; i++) {
             srcArrayA[i] = rd.nextFloat();
             srcArrayB[i] = rd.nextFloat();
         }
         System.out.println(" - Finished randomizing");
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -108,6 +108,10 @@ class KernelConfigurationSet {
         if (this.n <= 1024) {
             System.out.println(java.util.Arrays.toString(srcArrayA));
             System.out.println(java.util.Arrays.toString(srcArrayB));
+        }
+        else {
+            System.out.println(srcArrayA[this.n-1]);
+            System.out.println(srcArrayB[this.n-1]);
         }
     }
 
@@ -133,7 +137,7 @@ class KernelConfigurationSet {
         // Allocate the memory objects for the input- and output data
         this.memObjects[0] = clCreateBuffer(this.context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, (long) Sizeof.cl_float * this.n, KernelConfigurationSet.srcA, null);
         this.memObjects[1] = clCreateBuffer(this.context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, (long) Sizeof.cl_float * this.n, KernelConfigurationSet.srcB, null);
-        this.memObjects[2] = clCreateBuffer(this.context, CL_MEM_READ_WRITE, (long) Sizeof.cl_int * this.n, null, null);
+        this.memObjects[2] = clCreateBuffer(this.context, CL_MEM_READ_WRITE,                       (long) Sizeof.cl_float * this.n, null, null);
     }
 
 
@@ -163,25 +167,35 @@ class KernelConfigurationSet {
 
     public void configureWork() {
         this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 32 };
+        this.local_work_size  = new long[] { 2 };
     }
 
 
     public void runKernel(int iterations) {
+        boolean withWriteEvent = false;
         long sumRun = 0;
         for (int i = 0; i<iterations; i++) {
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             //
+                //
+                cl_event writeEvent0 = new cl_event();
+                cl_event writeEvent1 = new cl_event();
+                if (withWriteEvent) {
+                    clEnqueueWriteBuffer(this.commandQueue,this.memObjects[0], true, 0, 0, KernelConfigurationSet.srcA, 0, null, writeEvent0);
+                    clEnqueueWriteBuffer(this.commandQueue,this.memObjects[1], true, 0, 0, KernelConfigurationSet.srcB, 0, null, writeEvent1);
+                    System.out.println("Waiting for write events...");
+                    CL.clWaitForEvents(1, new cl_event[]{writeEvent0});
+                    CL.clWaitForEvents(1, new cl_event[]{writeEvent1});
+                }
+                //
                 // Execute the kernel & Read the output data
                 cl_event kernelEvent0 = new cl_event();
                 clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, kernelEvent0);
-                //
                 System.out.println("Waiting for kernel events...");
                 CL.clWaitForEvents(1, new cl_event[]{kernelEvent0});
                 //
                 cl_event readEvent0 = new cl_event();
-                clEnqueueReadBuffer(this.commandQueue, this.memObjects[2], CL_TRUE, 0, (long) n * Sizeof.cl_int, KernelConfigurationSet.dst, 0, null, readEvent0);
-                //
+                clEnqueueReadBuffer(this.commandQueue, this.memObjects[2], CL_TRUE, 0, (long) n * Sizeof.cl_float, KernelConfigurationSet.dst, 0, null, readEvent0);
                 System.out.println("Waiting for read events...");
                 CL.clWaitForEvents(1, new cl_event[]{readEvent0});
             //
@@ -189,8 +203,12 @@ class KernelConfigurationSet {
             sumRun = sumRun + (bTime - aTime);
             // Print the timing information for the commands
             ExecutionStatistics executionStatistics = new ExecutionStatistics();
+            if (withWriteEvent) {
+                executionStatistics.addEntry("write0", writeEvent0);
+                executionStatistics.addEntry("write0", writeEvent1);
+            }
             executionStatistics.addEntry("kernel0", kernelEvent0);
-            executionStatistics.addEntry("  read0", readEvent0);
+            executionStatistics.addEntry("read0",   readEvent0);
             executionStatistics.print();
             System.out.println("Took OpenCL calc&read result: " + String.valueOf(bTime - aTime) + "ms\n");
             System.out.println("\n");
@@ -213,8 +231,14 @@ class KernelConfigurationSet {
         if (this.n <= 1024) {
             System.out.println("Result: " + java.util.Arrays.toString(KernelConfigurationSet.dstArray));
         }
-        float nf     = n*1.0F;
-        int sum      = Arrays.stream(dstArray).sum();
+        else {
+            System.out.println(dstArray[this.n-1]);
+        }
+        float nf  = n*1.0F;
+        int sum = 0;
+        for (int i=0; i<dstArray.length; i++) {
+          sum = sum + (int)dstArray[i];
+        }
         float result = (4.0F * sum) / nf;
         System.out.println("PI EST MC: " + result);
     }
