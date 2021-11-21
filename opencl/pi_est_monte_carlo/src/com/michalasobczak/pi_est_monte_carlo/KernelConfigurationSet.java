@@ -172,7 +172,7 @@ class KernelConfigurationSet {
 
 
     public void runKernel(int iterations) {
-        boolean withWriteEvent = false;
+        boolean withWriteEvent = true;
         long sumRun = 0;
         for (int i = 0; i<iterations; i++) {
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
@@ -181,11 +181,30 @@ class KernelConfigurationSet {
                 cl_event writeEvent0 = new cl_event();
                 cl_event writeEvent1 = new cl_event();
                 if (withWriteEvent) {
+                    System.out.println("write 0");
                     clEnqueueWriteBuffer(this.commandQueue,this.memObjects[0], true, 0, 0, KernelConfigurationSet.srcA, 0, null, writeEvent0);
+                    clFinish(this.commandQueue);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("write 1");
                     clEnqueueWriteBuffer(this.commandQueue,this.memObjects[1], true, 0, 0, KernelConfigurationSet.srcB, 0, null, writeEvent1);
+                    clFinish(this.commandQueue);
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     System.out.println("Waiting for write events...");
                     CL.clWaitForEvents(1, new cl_event[]{writeEvent0});
                     CL.clWaitForEvents(1, new cl_event[]{writeEvent1});
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 //
                 // Execute the kernel & Read the output data
