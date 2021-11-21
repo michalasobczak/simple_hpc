@@ -181,14 +181,21 @@ class KernelConfigurationSet {
                 cl_event writeEvent0 = new cl_event();
                 cl_event writeEvent1 = new cl_event();
                 if (withWriteEvent) {
-                    System.out.println("write 0");
-                    clEnqueueWriteBuffer(this.commandQueue,this.memObjects[0], true, 0, 0, KernelConfigurationSet.srcA, 0, null, writeEvent0);
-                    //clFinish(this.commandQueue);
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    long beforeWrite = ZonedDateTime.now().toInstant().toEpochMilli();
+                    for (int j=0; j<100; j++) {
+                        System.out.println("write 0." + String.valueOf(j));
+                        clEnqueueWriteBuffer(this.commandQueue, this.memObjects[0], true, 0, 0, KernelConfigurationSet.srcA, 0, null, writeEvent0);
+                        clFinish(this.commandQueue);
+                        try {
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    long afterWrite = ZonedDateTime.now().toInstant().toEpochMilli();
+                    long writeDiff = afterWrite - beforeWrite;
+                    System.out.println("writeDiff=" + String.valueOf(writeDiff));
+                    //
                     System.out.println("write 1");
                     clEnqueueWriteBuffer(this.commandQueue,this.memObjects[1], true, 0, 0, KernelConfigurationSet.srcB, 0, null, writeEvent1);
                     //clFinish(this.commandQueue);
