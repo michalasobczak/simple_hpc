@@ -32,7 +32,7 @@ public class Main {
 
         // -----
         Utils.log("3. Platform and device selection");
-        r.selectPlatform(0);
+        r.selectPlatform(1);
         r.selectDevice(1);
 
         // -----
@@ -57,7 +57,7 @@ public class Main {
 
         // -----
         Utils.log("6. Run kernel, read buffer");
-        c.runKernel(5);
+        c.runKernel(1);
 
         // -----
         Utils.log("7. Release kernel, program, and memory objects");

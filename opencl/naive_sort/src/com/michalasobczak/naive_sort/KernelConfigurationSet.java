@@ -106,7 +106,7 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("opencl/naive_sort/src/com/michalasobczak/naive_sort/kernel.c"));
+            this.content = Files.readString(Path.of("naive_sort/src/com/michalasobczak/naive_sort/kernel.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -128,7 +128,7 @@ class KernelConfigurationSet {
 
     public void configureWork() {
         this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 32 };
+        this.local_work_size  = new long[] { 1 };
     }
 
 
@@ -162,7 +162,7 @@ class KernelConfigurationSet {
             }
         }
         if (this.n <= 1024) {
-            System.out.println("Result: " + java.util.Arrays.toString(KernelConfigurationSet.dstArray));
+            //System.out.println("Result: " + java.util.Arrays.toString(KernelConfigurationSet.dstArray));
             System.out.println("nonZeroElements: " + nonZeroElements.toString());
         }
         System.out.println("nonZeroElements count: " + nonZeroElements.size());

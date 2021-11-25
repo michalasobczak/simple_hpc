@@ -6,7 +6,6 @@ import com.michalasobczak.opencl.Utils;
 import org.jocl.CL;
 
 
-
 public class Main {
 
     public static void main(String[] args) {
@@ -20,7 +19,7 @@ public class Main {
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n = 32;
+        int n = 8;
         PlatformParametersSet p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
         KernelConfigurationSet c = new KernelConfigurationSet(n);

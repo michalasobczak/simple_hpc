@@ -66,8 +66,8 @@ public class Main extends JFrame {
 
         // -----
         Utils.log("3. Platform and device selection");
-        r.selectPlatform(0);
-        r.selectDevice(0);
+        r.selectPlatform(1);
+        r.selectDevice(1);
 
         // -----
         Utils.log("4. Create input and output data");
