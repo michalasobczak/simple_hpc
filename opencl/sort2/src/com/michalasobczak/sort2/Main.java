@@ -1,4 +1,4 @@
-package com.michalasobczak.reduction;
+package com.michalasobczak.sort2;
 
 import com.michalasobczak.opencl.PlatformParametersSet;
 import com.michalasobczak.opencl.RuntimeConfigurationSet;
@@ -9,8 +9,8 @@ import org.jocl.CL;
 public class Main {
 
     public static void main(String[] args) {
-        Utils.log("***** REDUCTION                     *****");
-        Utils.log("***** com.michalasobczak.reduction  *****");
+        Utils.log("***** SORT2                     *****");
+        Utils.log("***** com.michalasobczak.sort2  *****");
 
         // -----
         Utils.log("0. OpenCL specific configuration");
@@ -19,8 +19,8 @@ public class Main {
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n = 1024*1024*64;
-        int loc = 1024;
+        int n   = 1024*2;
+        int loc = 1024*2;
         PlatformParametersSet p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
         KernelConfigurationSet c = new KernelConfigurationSet(n, loc);
@@ -32,8 +32,8 @@ public class Main {
 
         // -----
         Utils.log("3. Platform and device selection");
-        r.selectPlatform(0);
-        r.selectDevice(0);
+        r.selectPlatform(1);
+        r.selectDevice(1);
 
         // -----
         Utils.log("4. Create input and output data");
