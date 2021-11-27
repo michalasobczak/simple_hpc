@@ -112,7 +112,7 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("sort2/src/com/michalasobczak/sort2/kernel2.c"));
+            this.content = Files.readString(Path.of("sort2/src/com/michalasobczak/sort2/kernel.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -134,8 +134,8 @@ class KernelConfigurationSet {
 
 
     public void configureWork() {
-        this.global_work_size = new long[] { 1 } ;
-        this.local_work_size  = new long[] { 1 };
+        this.global_work_size = new long[] { this.n };  // dla kernel2 ustaw 1
+        this.local_work_size  = new long[] { this.loc }; // dla kernel2 ustaw 1
     }
 
 
@@ -202,13 +202,12 @@ class KernelConfigurationSet {
 
     public void printResults() {
         float[] copiedArray = Arrays.copyOfRange(dstArray, 0, this.n);
-        //System.out.println(Arrays.toString(copiedArray));
+        System.out.println(Arrays.toString(copiedArray));
         //long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
         //Arrays.sort(srcArrayA);
         //long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
         //System.out.println(Arrays.toString(srcArrayA));
         //System.out.println("Java sort result: " + String.valueOf(bTime - aTime) + "ms");
-
         //
         // Bubble Java
         long aTime = ZonedDateTime.now().toInstant().toEpochMilli();

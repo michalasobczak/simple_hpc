@@ -19,8 +19,8 @@ public class Main {
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n   = 1024*2;
-        int loc = 1024*2;
+        int n   = 1024;
+        int loc = 1024;
         PlatformParametersSet p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
         KernelConfigurationSet c = new KernelConfigurationSet(n, loc);

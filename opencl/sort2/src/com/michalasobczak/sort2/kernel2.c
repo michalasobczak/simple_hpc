@@ -1,4 +1,4 @@
-#define MAX 1024*2
+#define MAX 1024
 
 __kernel void sampleKernel(__global const float *a,
                            __global       float *d,
