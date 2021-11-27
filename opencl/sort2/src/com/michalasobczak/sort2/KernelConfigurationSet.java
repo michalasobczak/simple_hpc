@@ -214,7 +214,7 @@ class KernelConfigurationSet {
         long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
         float tmp = 0;
         for (int i=0;i<this.n-1;i++) {
-            for (int j=0;j<this.n-1;j++) {
+            for (int j=0;j<this.n-i-1;j++) {
               if (copiedArray[j] > copiedArray[j+1]) {
                   tmp = copiedArray[j];
                   copiedArray[j] = copiedArray[j+1];

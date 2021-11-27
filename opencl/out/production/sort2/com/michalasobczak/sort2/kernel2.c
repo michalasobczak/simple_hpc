@@ -1,6 +1,8 @@
 #define MAX 1024*2
 
-__kernel void sampleKernel(__global const float *a, __global float *d, __local float *local_data) {
+__kernel void sampleKernel(__global const float *a,
+                           __global       float *d,
+                           __local        float *local_data) {
     //__private int ls  = get_local_size(0);
     __private int gid = get_global_id(0);
     __private int group_id = get_group_id(0);
@@ -15,7 +17,7 @@ __kernel void sampleKernel(__global const float *a, __global float *d, __local f
     //
     if (gid == 0) {
       for (int t=0;t<MAX-1;t++) {
-        for (int u=0;u<MAX-1;u++) {
+        for (int u=0;u<MAX-t-1;u++) {
           if (local_data[u] > local_data[u+1]) {
             tmp = local_data[u];
             local_data[u] = local_data[u+1];
