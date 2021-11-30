@@ -104,7 +104,7 @@ class KernelConfigurationSet {
 
     public void createBuffers() {
         // Allocate the memory objects for the input- and output data
-        this.memObjects[0] = clCreateBuffer(this.context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, (long) Sizeof.cl_float * this.n, KernelConfigurationSet.srcA, null);
+        this.memObjects[0] = clCreateBuffer(this.context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, (long) Sizeof.cl_float * this.n, KernelConfigurationSet.srcA, null);
         this.memObjects[1] = clCreateBuffer(this.context, CL_MEM_READ_WRITE, (long) Sizeof.cl_float * this.n, null, null);
     }
 
@@ -112,7 +112,7 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("sort2/src/com/michalasobczak/sort2/kernel.c"));
+            this.content = Files.readString(Path.of("sort2/src/com/michalasobczak/sort2/kernel3.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -142,6 +142,8 @@ class KernelConfigurationSet {
     public void runKernel(int iterations) {
         boolean withWriteEvent = true;
         long sumRun = 0;
+        long[] off0 = new long[] { 0 };
+        long[] off1 = new long[] { 1 };
         for (int i = 0; i<iterations; i++) {
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             //
@@ -162,8 +164,16 @@ class KernelConfigurationSet {
                     CL.clWaitForEvents(1, new cl_event[]{writeEvent0});
                 }
                 // Execute the kernel
+                // Uwaga: wielokrotne uruchamianie tylko dla kernel3.
+                // w pozostałych przykładach wskazać offset jako null i usunąć pętlę
                 cl_event kernelEvent0 = new cl_event();
-                clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, kernelEvent0);
+                for (int j=0; j<=(this.n/2); j++) {
+                    //System.out.println(j);
+                    clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, off0, this.global_work_size, this.local_work_size, 0, null, kernelEvent0);
+                    clFinish(this.commandQueue);
+                    clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, off1, this.global_work_size, this.local_work_size, 0, null, kernelEvent0);
+                    clFinish(this.commandQueue);
+                }
                 System.out.println("Waiting for kernel events...");
                 CL.clWaitForEvents(1, new cl_event[]{kernelEvent0});
                 // Read output
@@ -223,6 +233,7 @@ class KernelConfigurationSet {
         }
         long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
         System.out.println("Java bubble sort result: " + String.valueOf(bTime - aTime) + "ms");
+        System.out.println(Arrays.toString(copiedArray));
         //
         System.out.println(Arrays.compare(copiedArray, dstArray));
     }
