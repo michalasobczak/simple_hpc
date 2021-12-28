@@ -200,7 +200,7 @@ class KernelConfigurationSet {
         imageFormat.image_channel_order = CL_RGBA;
         imageFormat.image_channel_data_type = CL_UNSIGNED_INT8;
         inputImageMem = clCreateImage2D(
-                context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                context, CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
                 new cl_image_format[]{imageFormat}, imageSizeX, imageSizeY,
                 imageSizeX * Sizeof.cl_uint, Pointer.to(dataSrc), null);
         outputImageMem = clCreateImage2D(
