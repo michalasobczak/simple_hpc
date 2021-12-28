@@ -112,7 +112,7 @@ class KernelConfigurationSet {
     public void readKernelFile() {
         this.content = new String("");
         try {
-            this.content = Files.readString(Path.of("sort2/src/com/michalasobczak/sort2/kernel3.c"));
+            this.content = Files.readString(Path.of("sort2/src/com/michalasobczak/sort2/kernel4.c"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -167,13 +167,13 @@ class KernelConfigurationSet {
                 // Uwaga: wielokrotne uruchamianie tylko dla kernel3.
                 // w pozostałych przykładach wskazać offset jako null i usunąć pętlę
                 cl_event kernelEvent0 = new cl_event();
-                for (int j=0; j<=(this.n/2); j++) {
+                //for (int j=0; j<=(this.n/2); j++) {
                     //System.out.println(j);
                     clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, off0, this.global_work_size, this.local_work_size, 0, null, kernelEvent0);
                     clFinish(this.commandQueue);
-                    clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, off1, this.global_work_size, this.local_work_size, 0, null, kernelEvent0);
-                    clFinish(this.commandQueue);
-                }
+                    //clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, off1, this.global_work_size, this.local_work_size, 0, null, kernelEvent0);
+                    //clFinish(this.commandQueue);
+                //}
                 System.out.println("Waiting for kernel events...");
                 CL.clWaitForEvents(1, new cl_event[]{kernelEvent0});
                 // Read output
@@ -212,28 +212,22 @@ class KernelConfigurationSet {
 
     public void printResults() {
         float[] copiedArray = Arrays.copyOfRange(dstArray, 0, this.n);
-        System.out.println(Arrays.toString(copiedArray));
-        //long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
-        //Arrays.sort(srcArrayA);
-        //long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
-        //System.out.println(Arrays.toString(srcArrayA));
-        //System.out.println("Java sort result: " + String.valueOf(bTime - aTime) + "ms");
-        //
-        // Bubble Java
+          //System.out.println(Arrays.toString(copiedArray));
         long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
-        float tmp = 0;
-        for (int i=0;i<this.n-1;i++) {
-            for (int j=0;j<this.n-i-1;j++) {
-              if (copiedArray[j] > copiedArray[j+1]) {
-                  tmp = copiedArray[j];
-                  copiedArray[j] = copiedArray[j+1];
-                  copiedArray[j+1] = tmp;
-              }
-            }
-        }
+//        float tmp = 0;
+//        for (int i=0;i<this.n-1;i++) {
+//            for (int j=0;j<this.n-i-1;j++) {
+//              if (copiedArray[j] > copiedArray[j+1]) {
+//                  tmp = copiedArray[j];
+//                  copiedArray[j] = copiedArray[j+1];
+//                  copiedArray[j+1] = tmp;
+//              }
+//            }
+//        }
+        Arrays.sort(copiedArray);
         long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
-        System.out.println("Java bubble sort result: " + String.valueOf(bTime - aTime) + "ms");
-        System.out.println(Arrays.toString(copiedArray));
+        System.out.println("Java sort result: " + String.valueOf(bTime - aTime) + "ms");
+          //System.out.println(Arrays.toString(copiedArray));
         //
         System.out.println(Arrays.compare(copiedArray, dstArray));
     }

@@ -24,10 +24,4 @@ __kernel void sampleKernel(__global float *a, __global float *d, __local float *
         }
       }
     }
-
-    //if (gid == 0) {
-    //  for (int i=0;i<MAX;i++) {
-    //    d[i] = a[i];
-    //  }
-    //}
 }
