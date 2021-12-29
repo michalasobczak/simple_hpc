@@ -5,7 +5,10 @@ import com.michalasobczak.opencl.RuntimeConfigurationSet;
 import com.michalasobczak.opencl.Utils;
 import org.jocl.CL;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 
 
 public class Main {
@@ -21,7 +24,7 @@ public class Main {
                 PlatformParametersSet p = new PlatformParametersSet();
                 RuntimeConfigurationSet r = new RuntimeConfigurationSet();
                 KernelConfigurationSet c = new KernelConfigurationSet();
-                c.initImages("picture/src/com/michalasobczak/picture/input3.png");
+                c.initImages("picture/src/com/michalasobczak/picture/input2.png");
                 //c.initPanel();
                 p.getPlatformsAndDevices();
                 p.getDevicesInfo();
@@ -40,6 +43,11 @@ public class Main {
                             c.setKernelArgs(x);
                             c.runKernel(1);
                             //c.outputLabel.repaint();
+                            try {
+                                ImageIO.write(c.outputImage, "png", new File("picture/src/com/michalasobczak/picture/output" + x + ".png"));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             x = x + 0.1f;
                         }
                     }

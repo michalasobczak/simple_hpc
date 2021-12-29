@@ -29,7 +29,7 @@ class KernelConfigurationSet {
 
     long[] globalWorkSize;
     private BufferedImage inputImage;
-    private BufferedImage outputImage;
+    public BufferedImage outputImage;
     private int imageSizeX;
     private int imageSizeY;
     private cl_mem inputImageMem;
@@ -175,6 +175,8 @@ class KernelConfigurationSet {
         JFrame frame = new JFrame("OpenCL picture test no 1");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.add(mainPanel, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
