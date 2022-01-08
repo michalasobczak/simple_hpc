@@ -14,7 +14,6 @@ public class Main {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                //new JOCLSimpleImage();
                 Utils.log("***** picture                     *****");
                 Utils.log("***** com.michalasobczak.picture  *****");
                 CL.setExceptionsEnabled(true);
@@ -29,7 +28,7 @@ public class Main {
                 r.selectDevice(1);
                 c.createContext();
                 c.createCommandQueue();
-                c.checkforImageSupport();
+                c.checkForImageSupport();
                 c.readKernelFile();
                 c.initImageMem();
                 c.initializeKernel();
@@ -46,7 +45,6 @@ public class Main {
                 });
                 thread.setDaemon(true);
                 thread.start();
-                //c.releaseResources();
             }
         });
     } // main

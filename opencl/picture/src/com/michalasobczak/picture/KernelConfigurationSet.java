@@ -180,7 +180,7 @@ class KernelConfigurationSet {
         frame.setVisible(true);
     }
 
-    public void checkforImageSupport() {
+    public void checkForImageSupport() {
         // Check if images are supported
         int imageSupport[] = new int[1];
         clGetDeviceInfo (RuntimeConfigurationSet.device, CL.CL_DEVICE_IMAGE_SUPPORT, Sizeof.cl_int, Pointer.to(imageSupport), null);
