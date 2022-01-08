@@ -29,7 +29,7 @@ class KernelConfigurationSet {
 
     long[] globalWorkSize;
     private BufferedImage inputImage;
-    private BufferedImage outputImage;
+    public BufferedImage outputImage;
     private int imageSizeX;
     private int imageSizeY;
     private cl_mem inputImageMem;
@@ -175,6 +175,8 @@ class KernelConfigurationSet {
         JFrame frame = new JFrame("OpenCL picture test no 1");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.add(mainPanel, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
@@ -200,7 +202,7 @@ class KernelConfigurationSet {
         imageFormat.image_channel_order = CL_RGBA;
         imageFormat.image_channel_data_type = CL_UNSIGNED_INT8;
         inputImageMem = clCreateImage2D(
-                context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                context, CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
                 new cl_image_format[]{imageFormat}, imageSizeX, imageSizeY,
                 imageSizeX * Sizeof.cl_uint, Pointer.to(dataSrc), null);
         outputImageMem = clCreateImage2D(
