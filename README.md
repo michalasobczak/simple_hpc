@@ -47,7 +47,7 @@ $HOME/.jdks/openjdk-15.0.2/bin/java
 It will work properly assuming you:
 - fetched code into $HOME/IdeaProjects/simple_hpc
 - downloaded JOCL library JAR into $HOME as well
-- built modules (main and reusing_code) to output out/production output folder
+- built modules (main and bandwidth) to output out/production output folder
 
 You can also run it directly from IntelliJ or other IDE.
 
