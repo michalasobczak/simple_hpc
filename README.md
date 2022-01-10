@@ -39,9 +39,9 @@ In order to run samples (i.e. reusing_code, com.company2.Main), try as it as fol
 
 ```
 $HOME/.jdks/openjdk-15.0.2/bin/java 
--classpath $HOME/IdeaProjects/simple_hpc/opencl/out/production/reusing_code
+-classpath $HOME/IdeaProjects/simple_hpc/opencl/out/production/bandwidth
           :$HOME/jocl-2.0.2.jar
-          :$HOME/IdeaProjects/simple_hpc/opencl/out/production/opencl com.company2.Main
+          :$HOME/IdeaProjects/simple_hpc/opencl/out/production/opencl com.michalasobczak.bandwidth.Main
 ```
 
 It will work properly assuming you:
