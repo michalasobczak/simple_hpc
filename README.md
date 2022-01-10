@@ -47,7 +47,7 @@ You can also run it directly from IntelliJ or other IDE.
 
 ## TBD
 
-### Part 2 - hardware (home computing)
+### Part 2 - home computing
 
 ### Part 3 - multimedia computing
 
