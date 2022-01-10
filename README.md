@@ -13,7 +13,6 @@ Please find TINA TI examples from the first part of series.
 ## WIP
 
 ### Part 5 - Undestanding OpenCL (SeriesPartFive)
-WIP
 
 #### Modules available
 
