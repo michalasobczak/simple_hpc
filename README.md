@@ -1,34 +1,37 @@
 # Simple High Performance Computing
 
-This is work in progress book project. You can review contents right now, but  please consider visiting this 
+This is work in progress book project. You can review contents right now, but please consider visiting this 
 repository periodically as it changes quite fast. The main goal for all of submodules is to excel in terms of both 
 software and hardware performance capabilities, still using commodity utilities. I try not to step into enterprise 
 grade or high pricing solutions willing to accomplish my tasks within modest budget and time frame.
 
-## Part 1 - "Podstawy elektroniki i budowa komputera w symulatorze", technicalities (SeriesPartOne)
+## Part 1 - "Podstawy elektroniki i budowa komputera w symulatorze" (SeriesPartOne)
 Please find TINA TI examples from the first part of series.
 
 ## Part 2 - hardware (home computing)
-WIP
+TBD
 
 ## Part 3 - multimedia computing
+TBD
+
+## Part 4 - OpenGL
+TBD
+
+## Part 5 - Undestanding OpenCL (SeriesPartFive)
 WIP
 
-## Part 4 -  OpenGL
-WIP
-
-## Part 5 -  OpenCL
-
-### BOM
+### Modules available
 
 There are few examples available:
 - main module (opencl/src)
-- reusing_code (to show how Java submodules works)
+- bandwidth (set of tests checking various scalar operation performance)
+- c64_3d (orthographic and perspective calculations)      
 - naive_sort (array indexing)
 - pi_est_monte_carlo (estimating PI by direct relation between square and circle)
-- c64_3d (orthographic and perspective calculations)
-- bandwidth (set of tests checking various scalar operation performance)
-- multi_processor
+- picture
+- reduction
+- reference_c
+- sort2
 
 ### How to run
 
@@ -50,4 +53,4 @@ You can also run it directly from IntelliJ or other IDE.
 
 
 ## Part 6 - data mining
-WIP
+TBD
