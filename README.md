@@ -35,7 +35,7 @@ There are few examples available:
 
 ### How to run
 
-In order to run samples (i.e. reusing_code, com.company2.Main), try as it as follows:
+In order to run samples (i.e. bandwidth, com.michalasobczak.bandwidth), try as it as follows:
 
 ```
 $HOME/.jdks/openjdk-15.0.2/bin/java 
