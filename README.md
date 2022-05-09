@@ -10,9 +10,7 @@ grade or high pricing solutions willing to accomplish my tasks within modest bud
 ### Part 1 - "Podstawy elektroniki i budowa komputera w symulatorze" (SeriesPartOne)
 Please find TINA TI examples from the first part of series.
 
-## WIP
-
-### Part 5 - Undestanding OpenCL (SeriesPartFive)
+### Part 5 - "OpenCL, programowanie CPU i GPU" (SeriesPartFive)
 
 #### Modules available
 
@@ -45,12 +43,16 @@ It will work properly assuming you:
 
 You can also run it directly from IntelliJ or other IDE.
 
+## WIP
+
+### Part 4 - OpenGL
+
+### Part 6 - data mining
+
 ## TBD
 
 ### Part 2 - home computing
 
 ### Part 3 - multimedia computing
 
-### Part 4 - OpenGL
 
-### Part 6 - data mining
