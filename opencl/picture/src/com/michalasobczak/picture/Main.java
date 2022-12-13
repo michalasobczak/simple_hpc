@@ -27,8 +27,8 @@ public class Main {
                 //c.initPanel();
                 p.getPlatformsAndDevices();
                 p.getDevicesInfo();
-                r.selectPlatform(1);
-                r.selectDevice(1);
+                r.selectPlatform(0);
+                r.selectDevice(0);
                 c.createContext();
                 c.createCommandQueue();
                 c.checkForImageSupport();
