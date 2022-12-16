@@ -37,6 +37,7 @@ void print_uchar_arr64(uchar arr[]) {
     printf("\n");
 }
 
+
 uchar* convert_8decimals_into_bs(uchar arr[], uchar result[]) {
     int j = 0;
     int i;
@@ -49,8 +50,6 @@ uchar* convert_8decimals_into_bs(uchar arr[], uchar result[]) {
         }
         j++;
     } // for
-    //printf("bs: %s\n", result);
-    //print_uchar_arr64(result);
     return result;
 }
 
@@ -63,6 +62,7 @@ void print_uchar_arr56(uchar arr[]) {
     printf("\n");
 }
 
+
 void print_uchar_arr48(uchar arr[]) {
     int i;
     for (i=0; i<48; i++) {
@@ -70,6 +70,7 @@ void print_uchar_arr48(uchar arr[]) {
     }
     printf("\n");
 }
+
 
 void print_uchar_arr32(uchar arr[]) {
     int i;
@@ -79,6 +80,7 @@ void print_uchar_arr32(uchar arr[]) {
     printf("\n");
 }
 
+
 void print_uchar_arr28(uchar arr[]) {
     int i;
     for (i=0; i<28; i++) {
@@ -86,6 +88,7 @@ void print_uchar_arr28(uchar arr[]) {
     }
     printf("\n");
 }
+
 
 void print_uchar_arr8(uchar arr[]) {
     int i;
@@ -95,6 +98,7 @@ void print_uchar_arr8(uchar arr[]) {
     printf("\n");
 }
 
+
 void print_uchar_arr4(uchar arr[]) {
     int i;
     for (i=0; i<4; i++) {
@@ -102,6 +106,7 @@ void print_uchar_arr4(uchar arr[]) {
     }
     printf("\n");
 }
+
 
 void shift_left_once(uchar arr[]) {
     uchar tmp1 = arr[0];
@@ -138,6 +143,7 @@ int convert_binary_to_decimal(uchar binaryChar[], int length) {
     return sum;
 }
 
+
 void convert_decimal_to_binary(int n, uchar result[]) {
     int a[10], i;
     int res[4] = {0, 0, 0, 0};
@@ -166,6 +172,7 @@ void convert_decimal_to_binary(int n, uchar result[]) {
     //printf("result = %c %c %c %c \n", result[0], result[1], result[2], result[3]);
 }
 
+
 int convert_bs_part_to_decimal(uchar bs[], int start) {
     uchar tmp[8];
     int c = 0;
@@ -173,49 +180,45 @@ int convert_bs_part_to_decimal(uchar bs[], int start) {
         tmp[c] = bs[i];
         c++;
     }
-    print_uchar_arr8(tmp);
+    //print_uchar_arr8(tmp);
     int result = convert_binary_to_decimal(tmp, 8);
-    printf("result = %u '%c' ", result, result);
+    //printf("result = %u '%c' ", result, result);
     return result;
 }
 
 
+// FP01
 __kernel void sampleKernel(__global const uchar8* src,
                            __global       uchar8* dst)
 {
+    // FP02: identification
     __private int gc  = get_num_groups(0);
     __private int ls  = get_local_size(0);
     __private int gs  = gc*ls;
     __private int gid = get_global_id(0);
     __private int lid = get_local_id(0);
     __private uchar8 current = src[gid];
-    printf("lid:%u, gid:%u, value: %u, %u, %u, %u, %u, %u, %u, %u \n", lid, gid, current.s0, current.s1, current.s2, current.s3,
-                                                                                 current.s4, current.s5, current.s6, current.s7);
-    //
+    //printf("lid:%u, gid:%u, value: %u, %u, %u, %u, %u, %u, %u, %u \n", lid, gid, current.s0, current.s1, current.s2, current.s3, current.s4, current.s5, current.s6, current.s7);
     //printf("\n--> data definition\n");
-    //
-    // DES key
-    //
-    const uchar key[8]    =  {0, 255, 255, 255, 4, 5, 100, 255};   // key (decimal)
+    // FP03: DES key
+    const uchar key[8] =  {0, 255, 255, 255, 4, 5, 100, 255}; // key (decimal)
     //print_uchar_arr_as_decimals(key);
     //print_uchar_arr_as_binaries(key);
     uchar key_bs[64];
-    convert_8decimals_into_bs(key, key_bs);  // binary string, uchar* arr
+    convert_8decimals_into_bs(key, key_bs); // binary string, uchar* arr
     //printf("key_bs: "); print_uchar_arr64(key_bs);
-    //
     // round keys
     uchar round_keys[16][48];
-    //
-    // PT
-    //uchar pt_str[8] =  {48, 49, 50, 51, 52, 53, 54, 55};     // plain text (decimal ASCI)
-    const uchar pt_str[8] =  {current.s0, current.s1, current.s2, current.s3, current.s4, current.s5, current.s6, current.s7};     // plain text (decimal ASCI)
+    // FP04: PT
+    //uchar pt_str[8] =  {48, 49, 50, 51, 52, 53, 54, 55}; // plain text (decimal ASCI)
+    const uchar pt_str[8] =  {current.s0, current.s1, current.s2, current.s3, current.s4, current.s5, current.s6, current.s7}; // plain text (decimal ASCI)
     uchar pt[64];
     convert_8decimals_into_bs(pt_str, pt);    // plain text (binary string)
     //printf("pt in bs: "); print_uchar_arr64(pt);
-    //
     //printf("\n--> generate keys\n");
-    // generate keys
-    // The PC1 table
+    //
+    // ~~~ GENERATING KEYS ~~~
+    // FP05: The PC1 table
     const uchar pc1[56] = {
         57,49,41,33,25,17,9,
         1,58,50,42,34,26,18,
@@ -238,7 +241,7 @@ __kernel void sampleKernel(__global const uchar8* src,
         46,42,50,36,29,32
     };
     //
-	// 1. Compressing the key using the PC1 table
+	// FP06: Compressing the key using PC1 table
 	uchar perm_key[56];
 	//printf("PERM_KEY: ");
 	int iperm=0;
@@ -247,34 +250,30 @@ __kernel void sampleKernel(__global const uchar8* src,
 		perm_key[iperm] = key_bs[index];
 	} // for
 	//print_uchar_arr56(perm_key);
-    //
-    // 2. Dividing the key into two equal halves
+    // FP07: Dividing the key into two equal halves
     uchar left[28];   for (int i=0; i<28; i++) { left[i]  = perm_key[i]; } //printf("LEFT:  "); print_uchar_arr28(left);
     uchar _right[28]; int c = 0; for (int i=28; i<56; i++) { _right[c] = perm_key[i]; c++; }; //printf("RIGHT: "); print_uchar_arr28(_right);
-    //
     int i;
     for (i=0; i<16; i++) {
-        // 3.1. For rounds 1, 2, 9, 16 the key_chunks
-        // are shifted by one.
+        // FP08: For rounds 1, 2, 9, 16 key_chunks are shifted by one.
         if (i == 0 || i == 1 || i==8 || i==15) {
             shift_left_once(left);   //print_uchar_arr28(left);
             shift_left_once(_right); //print_uchar_arr28(_right);
         }
-        // 3.2. For other rounds, the key_chunks
-        // are shifted by two
+        // FP09: For other rounds, key_chunks are shifted by two
         else {
             shift_left_once(left); shift_left_once(left);
             shift_left_once(_right); shift_left_once(_right);
             //print_uchar_arr28(left);
             //print_uchar_arr28(_right);
         }
-        // Combining the two chunks
+        // FP10: Combining the two chunks
         uchar combined_key[56];
         for (int j=0; j<28; j++) { combined_key[j] = left[j]; }
         int c = 0; for (int j=28; j<56; j++) { combined_key[j] = _right[c]; c++; }
         //printf("combined: %u: ", i); print_uchar_arr56(combined_key);
         //
-        // Finally, using the PC2 table to transpose the key bits
+        // FP11: using PC2 table to transpose  key bits
         uchar tmp_round_key[48];
         for (int k = 0; k < 48; k++) {
             tmp_round_key[k] = combined_key[pc2[k]-1];
@@ -285,10 +284,9 @@ __kernel void sampleKernel(__global const uchar8* src,
         //printf("round_key %u: ", i); print_uchar_arr48(round_keys[i]);
     } // for round_keys
     //
-    // DES
-    //
+    // ~~~ DES encryption ~~~
     //printf("\n--> Encryption\n");
-    // The initial permutation table
+    // FP12: The initial permutation table
     int initial_permutation[64] = {
         58,50,42,34,26,18,10,2,
         60,52,44,36,28,20,12,4,
@@ -308,9 +306,7 @@ __kernel void sampleKernel(__global const uchar8* src,
         22,23,24,25,24,25,26,27,
         28,29,28,29,30,31,32,1
     };
-    // The substitution boxes. The should contain values
-    // from 0 to 15 in any order.
-
+    // FP13: The substitution boxes. Should contain values from 0 to 15 in any order.
     int substition_boxes[8][14][16] =
     {{
         {14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7},
@@ -360,8 +356,7 @@ __kernel void sampleKernel(__global const uchar8* src,
         {7,11,4,1,9,12,14,2,0,6,10,13,15,3,5,8},
         {2,1,14,7,4,10,8,13,15,12,9,0,3,5,6,11}
     }};
-    //
-    // The permutation table
+    // FP14: The permutation table
     int permutation_tab[32] = {
         16,7,20,21,29,12,28,17,
         1,15,23,26,5,18,31,10,
@@ -379,8 +374,7 @@ __kernel void sampleKernel(__global const uchar8* src,
         34,2,42,10,50,18,58,26,
         33,1,41,9,49,17,57,25
     };
-    //
-    //1. Applying the initial permutation
+    // FP15: Applying the initial permutation
     uchar perm[64];
     //printf("pt: "); print_uchar_arr64(pt);
     int ip;
@@ -388,27 +382,23 @@ __kernel void sampleKernel(__global const uchar8* src,
         perm[ip] = pt[initial_permutation[ip]-1];
     }
     //printf("perm initial permutation applied: "); print_uchar_arr64(perm);
-    //
-    // 2. Dividing the result into two equal halves
-    //string left = perm.substr(0, 32);
-    //string right = perm.substr(32, 32);
+    // FP16: Dividing the result into two equal halves
     uchar ptleft[32];  for (int i=0; i<32; i++) { ptleft[i]  = perm[i]; }; //printf("LEFT:  "); print_uchar_arr28(ptleft);
     uchar ptright[32]; c = 0; for (int i=32; i<64; i++) { ptright[c] = perm[i]; c++; }; //printf("RIGHT: "); print_uchar_arr28(ptright);
-    //
-    // The plain text is encrypted 16 times
+    // FP17: The plain text is encrypted 16 times
     for (int i=0; i<16; i++) {
   	    uchar right_expanded[48];
-		// 3.1. The right half of the plain text is expanded
+		// The right half of the plain text is expanded
     	for (int h = 0; h < 48; h++) {
       		right_expanded[h] = ptright[expansion_table[h]-1];
     	}
     	//printf("right_expanded: "); print_uchar_arr48(right_expanded);
-    	// 3.3. The result is xored with a key
+    	// FP18: The result is xored with a key
     	uchar xored[48];
         Xor(round_keys[i], right_expanded, xored, 48);
         //printf("xored: "); print_uchar_arr48(xored);
         uchar res[32];
-        // 3.4. The result is divided into 8 equal parts and passed
+        // FP19: The result is divided into 8 equal parts and passed
         // through 8 substitution boxes. After passing through a
         // substituion box, each box is reduces from 6 to 4 bits.
         for (int g=0;g<8; g++) {
@@ -434,17 +424,16 @@ __kernel void sampleKernel(__global const uchar8* src,
             }
         } // for
         //printf("res = "); print_uchar_arr32(res);
-        // 3.5. Another permutation is applied
-        //string perm2 = "";
+        // FP20 Another permutation is applied
         uchar perm2[32];
         for (int i = 0; i < 32; i++){
         	perm2[i] = res[permutation_tab[i]-1];
         }
-        // 3.6. The result is xored with the left half
+        // FP21: The result is xored with the left half
         uchar xored2[32];
         Xor(perm2, ptleft, xored2, 32);
         //printf("xored2: "); print_uchar_arr32(xored2);
-        // 3.7. The left and the right parts of the plain text are swapped
+        // FP22: The left and the right parts of the plain text are swapped
         for (int d=0; d<32; d++) {
             ptleft[d] = xored2[d];
         }
@@ -466,19 +455,17 @@ __kernel void sampleKernel(__global const uchar8* src,
         }
         //printf("\n");
     } // for, 16 times enc
-    //
-    // 4. The halves of the plain text are applied
+    // FP23: The halves of the plain text are applied
     uchar combined_text[64]; int ctc = 0;
     for (int i=0; i<32; i++)  { combined_text[i] = ptleft[i]; }
     for (int i=32; i<64; i++) { combined_text[i] = ptright[ctc]; ctc++; }
     uchar ciphertext[64];
-    // The inverse of the initial permuttaion is applied
+    // FP24: The inverse of the initial permuttaion is applied
     for (int i = 0; i < 64; i++) {
         ciphertext[i] = combined_text[inverse_permutation[i]-1];
     }
     //printf("ciphertext = "); print_uchar_arr64(ciphertext);
-    //
-    //
+    // FP25: final result
     uchar tmpchar[8] = {'0', '0', '0', '0', '0', '0', '0', '0'};
     uchar8 finalresult;
     finalresult.s0 = convert_bs_part_to_decimal(ciphertext, 0);
@@ -489,5 +476,6 @@ __kernel void sampleKernel(__global const uchar8* src,
     finalresult.s5 = convert_bs_part_to_decimal(ciphertext, 40);
     finalresult.s6 = convert_bs_part_to_decimal(ciphertext, 48);
     finalresult.s7 = convert_bs_part_to_decimal(ciphertext, 56);
+    // FP26: write to output buffer
     dst[gid] = finalresult;
 } // kernel

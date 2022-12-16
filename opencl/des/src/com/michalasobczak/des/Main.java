@@ -19,7 +19,7 @@ public class Main {
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n = 1;
+        int n = 1024*1024;
         PlatformParametersSet p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
         KernelConfigurationSet c = new KernelConfigurationSet(n);
@@ -31,15 +31,15 @@ public class Main {
 
         // -----
         Utils.log("3. Platform and device selection");
-        r.selectPlatform(0);
-        r.selectDevice(0);
+        r.selectPlatform(1);
+        r.selectDevice(1);
 
         // -----
         Utils.log("4. Create input and output data");
         c.initializeSrcArrayA();
         c.initializeDstArray();
         c.generateSampleRandomData();
-        c.printSrcArray();
+        //c.printSrcArray();
 
         // -----
         Utils.log("4. Create context and command queue and buffers");

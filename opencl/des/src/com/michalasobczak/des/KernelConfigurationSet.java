@@ -133,7 +133,7 @@ class KernelConfigurationSet {
 
     public void configureWork() {
         this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 1 };
+        this.local_work_size  = new long[] { 32 };
     }
 
 
