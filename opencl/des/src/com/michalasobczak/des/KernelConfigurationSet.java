@@ -69,13 +69,12 @@ class KernelConfigurationSet {
 
     public void generateSampleRandomData() {
         System.out.println(" - Started randomizing");
-        //Random rd = new Random();
+        Random rd = new Random();
         for (int i = 0; i <= (n*8) - 1; i++) {
-            //srcArrayA[i] = Character.forDigit(i, 32);
-            srcArrayA[i] = ((byte) i);
+            byte c = (byte)('a' + rd.nextInt(10));
+            //System.out.println(c);
+            srcArrayA[i] = c;
         }
-        //String s = new String(IntStream.rangeClosed(32, 126).toArray(), 0, 16);
-        //srcArrayA = s.toCharArray();
         System.out.println(" - Finished randomizing");
     }
 
@@ -167,8 +166,10 @@ class KernelConfigurationSet {
 
     public void printResults() {
         System.out.println("Elements: " + dstArray.length);
+        int i = 0;
         for (byte tmp : dstArray) {
-            //System.out.println(tmp);
+            //System.out.println(String.valueOf(i) + " : " + (Byte.toUnsignedInt(tmp)) );
+            i++;
         }
     }
 
