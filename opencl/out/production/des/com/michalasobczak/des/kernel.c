@@ -21,7 +21,7 @@ void print_uchar_arr_as_decimals(uchar arr[]) {
 
 void print_uchar_arr_as_binaries(uchar arr[]) {
     int i;
-    for (i=0; i<=7; i++) {
+    for (i=0; i<8; i++) {
         uchar str[8];
         bin_prnt_byte(arr[i], str);
         printf("binary %u: %c %c %c %c %c %c %c %c\n", i, str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
@@ -29,9 +29,9 @@ void print_uchar_arr_as_binaries(uchar arr[]) {
 } // print_binary
 
 
-void print_uchar_arr64(uchar arr[]) {
+void print_uchar_arr(uchar arr[], uchar size) {
     int i;
-    for (int i=0; i<64; i++) {
+    for (int i=0; i<size; i++) {
         printf("%c", arr[i]);
     }
     printf("\n");
@@ -41,7 +41,7 @@ void print_uchar_arr64(uchar arr[]) {
 uchar* convert_8decimals_into_bs(uchar arr[], __private uchar result[]) {
     int j = 0;
     int i;
-    for (i=0; i<=7; i++) {
+    for (i=0; i<8; i++) {
         uchar str[8];
         bin_prnt_byte(arr[i], str);
         int k;
@@ -51,60 +51,6 @@ uchar* convert_8decimals_into_bs(uchar arr[], __private uchar result[]) {
         j++;
     } // for
     return result;
-}
-
-
-void print_uchar_arr56(uchar arr[]) {
-    int i;
-    for (i=0; i<56; i++) {
-        printf("%c", arr[i]);
-    }
-    printf("\n");
-}
-
-
-void print_uchar_arr48(uchar arr[]) {
-    int i;
-    for (i=0; i<48; i++) {
-        printf("%c", arr[i]);
-    }
-    printf("\n");
-}
-
-
-void print_uchar_arr32(uchar arr[]) {
-    int i;
-    for (i=0; i<32; i++) {
-        printf("%c", arr[i]);
-    }
-    printf("\n");
-}
-
-
-void print_uchar_arr28(uchar arr[]) {
-    int i;
-    for (i=0; i<28; i++) {
-        printf("%c", arr[i]);
-    }
-    printf("\n");
-}
-
-
-void print_uchar_arr8(uchar arr[]) {
-    int i;
-    for (i=0; i<8; i++) {
-        printf("%c", arr[i]);
-    }
-    printf("\n");
-}
-
-
-void print_uchar_arr4(uchar arr[]) {
-    int i;
-    for (i=0; i<4; i++) {
-        printf("%c", arr[i]);
-    }
-    printf("\n");
 }
 
 
@@ -202,8 +148,8 @@ __kernel void sampleKernel(__global const uchar8* src,
     uchar key_bs[64];
     uchar round_keys[16][48];
     // FP04
-    const uchar pt_str[8] =  {48, 49, 50, 51, 52, 53, 54, 55}; // plain text (decimal ASCI)
-    //uchar pt_str[8]; // plain text (decimal ASCI)
+    //const uchar pt_str[8] =  {48, 49, 50, 51, 52, 53, 54, 55}; // plain text (decimal ASCI)
+    uchar pt_str[8]; // plain text (decimal ASCI)
     uchar pt[64];    // plain text
     // FP05: The PC1/PC2 table
     const uchar pc1[56] = {
@@ -264,7 +210,7 @@ __kernel void sampleKernel(__global const uchar8* src,
         28,29,28,29,30,31,32,1
     };
     // FP13: The substitution boxes. Should contain values from 0 to 15 in any order.
-    const uchar substition_boxes[8][14][16] =
+    const uchar substition_boxes[8][4][16] =
     {{
         {14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7},
         {0,15,7,4,14,2,13,1,10,6,12,11,9,5,3,8},
@@ -382,21 +328,21 @@ __kernel void sampleKernel(__global const uchar8* src,
     //print_uchar_arr_as_decimals(key);
     //print_uchar_arr_as_binaries(key);
     convert_8decimals_into_bs(key, key_bs); // binary string, uchar* arr
-    //printf("key_bs: "); print_uchar_arr(key_bs, 64);
+    printf("key_bs: "); print_uchar_arr(key_bs, 64);
     //printf("\n\n");
 
     // FP04
     //printf("FP04: pt \n");
-    //pt_str[0] = current.s0;
-    //pt_str[1] = current.s1;
-    //pt_str[2] = current.s2;
-    //pt_str[3] = current.s3;
-    //pt_str[4] = current.s4;
-    //pt_str[5] = current.s5;
-    //pt_str[6] = current.s6;
-    //pt_str[7] = current.s7;
+    pt_str[0] = current.s0;
+    pt_str[1] = current.s1;
+    pt_str[2] = current.s2;
+    pt_str[3] = current.s3;
+    pt_str[4] = current.s4;
+    pt_str[5] = current.s5;
+    pt_str[6] = current.s6;
+    pt_str[7] = current.s7;
     convert_8decimals_into_bs(pt_str, pt); // plain text (binary string)
-    //printf("pt in bs: "); print_uchar_arr(pt, 64);
+    printf("pt in bs: "); print_uchar_arr(pt, 64);
     //printf("\n\n");
 
     // FP06

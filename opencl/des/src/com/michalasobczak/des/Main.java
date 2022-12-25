@@ -19,7 +19,7 @@ public class Main {
 
         // -----
         Utils.log("1. Initialize configuration classes");
-        int n = 1024*1024;
+        int n = 1;
         PlatformParametersSet p = new PlatformParametersSet();
         RuntimeConfigurationSet r = new RuntimeConfigurationSet();
         KernelConfigurationSet c = new KernelConfigurationSet(n);
@@ -31,8 +31,8 @@ public class Main {
 
         // -----
         Utils.log("3. Platform and device selection");
-        r.selectPlatform(1);
-        r.selectDevice(1);
+        r.selectPlatform(0);
+        r.selectDevice(0);
 
         // -----
         Utils.log("4. Create input and output data");
