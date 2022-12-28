@@ -145,7 +145,7 @@ class KernelConfigurationSet {
             // Execute the kernel & Read the output data
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             System.out.println("Start.....");
-                2// Execute the kernel
+                // Execute the kernel
                 cl_event kernelEvent0 = new cl_event();
                     clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, kernelEvent0);
                     clFinish(this.commandQueue);
