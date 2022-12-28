@@ -328,7 +328,7 @@ __kernel void sampleKernel(__global const uchar8* src,
     //print_uchar_arr_as_decimals(key);
     //print_uchar_arr_as_binaries(key);
     convert_8decimals_into_bs(key, key_bs); // binary string, uchar* arr
-    printf("key_bs: "); print_uchar_arr(key_bs, 64);
+    //printf("key_bs: "); print_uchar_arr(key_bs, 64);
     //printf("\n\n");
 
     // FP04
@@ -342,7 +342,7 @@ __kernel void sampleKernel(__global const uchar8* src,
     pt_str[6] = current.s6;
     pt_str[7] = current.s7;
     convert_8decimals_into_bs(pt_str, pt); // plain text (binary string)
-    printf("pt in bs: "); print_uchar_arr(pt, 64);
+    //printf("pt in bs: "); print_uchar_arr(pt, 64);
     //printf("\n\n");
 
     // FP06

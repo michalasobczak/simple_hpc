@@ -1,5 +1,6 @@
 package com.michalasobczak.des;
 
+import com.michalasobczak.opencl.ExecutionStatistics;
 import com.michalasobczak.opencl.RuntimeConfigurationSet;
 import org.jocl.*;
 
@@ -97,7 +98,9 @@ class KernelConfigurationSet {
 
     public void createCommandQueue() {
         // Create a command-queue for the selected device
-        this.commandQueue = clCreateCommandQueue(this.context, RuntimeConfigurationSet.device, 0, null);
+        long properties = 0;
+        properties |= CL.CL_QUEUE_PROFILING_ENABLE;
+        this.commandQueue = clCreateCommandQueue(this.context, RuntimeConfigurationSet.device, properties, null);
     }
 
 
@@ -122,7 +125,7 @@ class KernelConfigurationSet {
         // Create the program from the source code
         this.program = clCreateProgramWithSource(this.context, 1, new String[] { this.content }, null, null);
         // Build the program
-        clBuildProgram(this.program, 0, null, "-cl-std=CL1.2", null, null);
+        clBuildProgram(this.program, 0, null, "-cl-std=CL2.0", null, null);
         // Create the kernel
         this.kernel = clCreateKernel(this.program, "sampleKernel", null);
         // Set the arguments for the kernel
@@ -133,7 +136,7 @@ class KernelConfigurationSet {
 
     public void configureWork() {
         this.global_work_size = new long[] { this.n } ;
-        this.local_work_size  = new long[] { 1 };
+        this.local_work_size  = new long[] { 32 };
     }
 
 
@@ -142,13 +145,24 @@ class KernelConfigurationSet {
             // Execute the kernel & Read the output data
             long aTime = ZonedDateTime.now().toInstant().toEpochMilli();
             System.out.println("Start.....");
-            // Write input
-            //cl_event writeEvent0 = new cl_event();
-            // Execute the kernel
-            //cl_event kernelEvent0 = new cl_event();
-                clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, null);
-                clEnqueueReadBuffer(this.commandQueue, this.memObjects[1], CL_TRUE, 0, (long) n * Sizeof.cl_uchar8, KernelConfigurationSet.dst, 0, null, null);
+                2// Execute the kernel
+                cl_event kernelEvent0 = new cl_event();
+                    clEnqueueNDRangeKernel(this.commandQueue, this.kernel, 1, null, this.global_work_size, this.local_work_size, 0, null, kernelEvent0);
+                    clFinish(this.commandQueue);
+                System.out.println("Waiting for kernel events...");
+                CL.clWaitForEvents(1, new cl_event[]{kernelEvent0});
+                // Read output
+                cl_event readEvent0 = new cl_event();
+                    clEnqueueReadBuffer(this.commandQueue, this.memObjects[1], CL_TRUE, 0, (long) n * Sizeof.cl_uchar8, KernelConfigurationSet.dst, 0, null, readEvent0);
+                System.out.println("Waiting for read events...");
+                CL.clWaitForEvents(1, new cl_event[]{readEvent0});
             long bTime = ZonedDateTime.now().toInstant().toEpochMilli();
+            // Print the timing information for the commands
+            ExecutionStatistics executionStatistics = new ExecutionStatistics();
+            executionStatistics.addEntry("kernel0", kernelEvent0);
+            executionStatistics.addEntry("read0",   readEvent0);
+            executionStatistics.print();
+            //
             System.out.println("Took OpenCL read result: " + String.valueOf(bTime - aTime) + "ms");
         }
     }
