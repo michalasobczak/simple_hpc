@@ -1,3 +1,5 @@
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+
 void bin_prnt_byte(uchar x, uchar str[]) {
    int j=0;
    int i;
