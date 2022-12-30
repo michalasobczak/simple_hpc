@@ -58,6 +58,6 @@ int find_string_in_string(uchar source[], uchar looking_for[]) {
                 return 1;
             }
         }
-    } 
+    }
     return 0;
 }

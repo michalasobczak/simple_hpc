@@ -22,6 +22,6 @@ __kernel void sampleKernel(__global const uchar*  srcA,
     }
     uchar tmp[10] = "Bible\0";
     set_string(word_buffer, tmp);
-    res = find_string_in_string(srcA, word_buffer);
+    res = find_string_in_string(current, word_buffer);
     dst[gid] = res;
 } // kernel
