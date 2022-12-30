@@ -12,7 +12,7 @@ __kernel void sampleKernel(__global const uchar* srcA,
     int gc, ls, gs, gid, lid;
     int c, d;
     int res = 0;
-    __private uchar current[131*1000]    = { '\0' };
+    __private uchar current[130000]    = { '\0' };
     __private uchar word_buffer[30] = { '\0' };
 
     // -- PROCEDURE

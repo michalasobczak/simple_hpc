@@ -105,7 +105,6 @@ class KernelConfigurationSet {
         System.out.println("Read no of lines: " + counter);
         System.out.println("sample line: " + vector.get(100));
         System.out.println("sample line size in chars: " + line_sizes.get(5));
-
         n = counter;
     }
 
