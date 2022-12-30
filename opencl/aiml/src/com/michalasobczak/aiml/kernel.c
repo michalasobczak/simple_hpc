@@ -2,7 +2,7 @@
 
 // ---------------------------------------------------------------------------------------------------------------------
 // FP01
-__kernel void sampleKernel(__global const uchar* srcA,
+__kernel void sampleKernel(__global const uchar*  srcA,
                            __global const int2*   srcB,
                            __global       uchar*  dst)
 {
@@ -20,8 +20,8 @@ __kernel void sampleKernel(__global const uchar* srcA,
         current[d] = srcA[c];
         d++;
     }
-    uchar tmp[10] = "LORD\0";
+    uchar tmp[10] = "Bible\0";
     set_string(word_buffer, tmp);
-    res = find_string_in_string(current, word_buffer);
+    res = find_string_in_string(srcA, word_buffer);
     dst[gid] = res;
 } // kernel

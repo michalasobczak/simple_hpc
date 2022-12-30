@@ -1,4 +1,4 @@
-#define MAX_STRING_SIZE 256
+#define MAX_STRING_SIZE 4500000
 
 int get_string_size(uchar string[]) {
     int size;
@@ -64,6 +64,7 @@ int find_string_in_string(uchar source[], uchar looking_for[]) {
             }
             if (d == lf_size-1) {
                 //printf("FOUND from %i to %i : %s\n", c, c+d, source);
+                //printf("FOUND from %i to %i \n", c, c+d);
                 return 1;
             }
         } // for within looking_for

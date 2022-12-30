@@ -57,7 +57,7 @@ public class Main {
 
         // -----
         Utils.log("6. Run kernel, read buffer");
-        c.runKernel(100000);
+        c.runKernel(1);
 
         // -----
         Utils.log("7. Release kernel, program, and memory objects");
